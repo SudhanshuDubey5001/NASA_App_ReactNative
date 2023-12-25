@@ -14,15 +14,16 @@ import Constants from './utils/Constants';
 import Header from './components/Header';
 import api from './api/NasaAPIs';
 import HelpingFunctions from './utils/HelpingFunctions';
+import Drawer from './routes/Drawer'
 
 const callAPI = async (date: string) => {
 
   const searchResults = await api.getNASALibraryImages('earth', 'image');
-  searchResults.forEach(item => {
-    console.log('Link => '+item.href);
-    console.log('Title => '+item.data[0].title);
-    console.log('Description => '+item.data[0].description);
-  });
+  // searchResults.forEach(item => {
+  //   console.log('Link => '+item.href);
+  //   console.log('Title => '+item.data[0].title);
+  //   console.log('Description => '+item.data[0].description);
+  // });
   // const images = await api.getMarsRoverPhotos('curiosity');
   // images.photos.forEach(image => {
   //   console.log('Image -> ' + image.img_src);
@@ -39,8 +40,9 @@ const callAPI = async (date: string) => {
 function App(): React.JSX.Element {
   return (
     <View>
-      <Header />
-      <Button title="Call" onPress={() => callAPI('')} />
+      {/* <Header />
+      <Button title="Call" onPress={() => callAPI('')} /> */}
+      <Drawer/>
     </View>
   );
 }
