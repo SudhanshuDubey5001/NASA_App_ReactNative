@@ -1,5 +1,7 @@
+import Colors from "./Colors";
+
 const GlobalStylesConstants = {
-    headerBackgroundColor: 'coral',
+    headerBackgroundColor: Colors.primary,
     headerTextColor: 'white',
 }
 

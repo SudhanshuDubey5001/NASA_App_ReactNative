@@ -4,4 +4,9 @@ module.exports = {
       root: '/root/libraries',
     },
   },
+  project: {
+    ios: {},
+    android: {},
+  },
+  assets: ['./assets/fonts'],
 };

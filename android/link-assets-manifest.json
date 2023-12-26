@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/NotoSerifBold.ttf",
+      "sha1": "26e576716767a74d49f3804df9d7acccb77ac3c1"
+    },
+    {
+      "path": "assets/fonts/NotoSerifRegular.ttf",
+      "sha1": "9e46439ce99209e9fcddcc9bcaa40aeecc9aa2d4"
+    },
+    {
+      "path": "assets/fonts/NotoSerifSemiBold.ttf",
+      "sha1": "a0291765f0f587f1f526c75952c991bea10c44ec"
+    }
+  ]
+}

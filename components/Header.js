@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import globalStylesConstants from '../global/GlobalStylesConstants'
 
-export default function Header(){
+export default function Header({navgation, title}){
     return(
         <View style = {styles.container}>
-            <Text style={styles.content}>N A S A</Text>
+            <Text style={styles.content}>{title}</Text>
         </View>
     );
 }
@@ -12,12 +12,10 @@ export default function Header(){
 const styles = StyleSheet.create({
     container: {
         backgroundColor:globalStylesConstants.headerBackgroundColor,
-        elevation:10,
     },
     content:{
         padding:10,
-        paddingTop:20,
-        fontSize:24,
+        fontSize:20,
         color:globalStylesConstants.headerTextColor,
         alignSelf:'center'
     }

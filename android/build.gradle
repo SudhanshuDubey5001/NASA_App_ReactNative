@@ -6,6 +6,7 @@ buildscript {
         targetSdkVersion = 33
         ndkVersion = "25.1.8937393"
         kotlinVersion = "1.8.0"
+        RNVUseExoplayerIMA = true
     }
     repositories {
         google()
@@ -15,6 +16,11 @@ buildscript {
             content {
                 includeModule("com.yqritc", "android-scalablevideoview")
             }
+        }
+    }
+    configurations.all {
+        resolutionStrategy {
+            force 'com.facebook.react:react-native:0.73.1'
         }
     }
     dependencies {

@@ -1,4 +1,3 @@
-import "react-native-gesture-handler";
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,6 +7,7 @@ import Donki from "../screens/Donki";
 import Earth from "../screens/Earth";
 import MarsRover from "../screens/MarsRover";
 import NasaLibrary from "../screens/NasaLibrary";
+import Header from '../components/Header'
 
 const Drawer = createDrawerNavigator();
 
@@ -29,7 +29,7 @@ export default function Navigator() {
           options={({ navigation }) => {
             return {
               headerTitle: () => (
-                <Header navigation={navigation} title={"Home"} />
+                <Header navigation={navigation} title={"NASA"} />
               ),
             };
           }}
@@ -40,7 +40,7 @@ export default function Navigator() {
           options={({ navigation }) => {
             return {
               headerTitle: () => (
-                <Header navigation={navigation} title={"About Movie Zone"} />
+                <Header navigation={navigation} title={"DONKI"} />
               ),
             };
           }}
@@ -51,29 +51,29 @@ export default function Navigator() {
           options={({ navigation }) => {
             return {
               headerTitle: () => (
-                <Header navigation={navigation} title={"About Movie Zone"} />
+                <Header navigation={navigation} title={"Earth"} />
               ),
             };
           }}
         />
         <Drawer.Screen
-          name="MarsRover"
+          name="Mars Rover"
           component={MarsRover}
           options={({ navigation }) => {
             return {
               headerTitle: () => (
-                <Header navigation={navigation} title={"About Movie Zone"} />
+                <Header navigation={navigation} title={"Mars Rover"} />
               ),
             };
           }}
         />
         <Drawer.Screen
-          name="NasaLibrary"
+          name="NASA Images Library"
           component={NasaLibrary}
           options={({ navigation }) => {
             return {
               headerTitle: () => (
-                <Header navigation={navigation} title={"About Movie Zone"} />
+                <Header navigation={navigation} title={"NASA Images Library"} />
               ),
             };
           }}
