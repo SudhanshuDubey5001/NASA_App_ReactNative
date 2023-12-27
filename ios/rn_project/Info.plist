@@ -52,6 +52,9 @@
 		<string>NotoSerifBold.ttf</string>
 		<string>NotoSerifRegular.ttf</string>
 		<string>NotoSerifSemiBold.ttf</string>
+		<string>LibreBaskerville-Bold.ttf</string>
+		<string>LibreBaskerville-Italic.ttf</string>
+		<string>LibreBaskerville-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

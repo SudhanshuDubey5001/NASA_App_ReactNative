@@ -4,11 +4,11 @@ import HelpingFunctions from '../utils/HelpingFunctions';
 
 // const [startDate, setStartDate] = useState('yyyy-MM-dd');
 // const [endDate, setEndDate] = useState('yyyy-MM-dd');
-const startDate = 'yyyy-MM-dd';
-const endDate = 'yyyy-MM-dd';
+// const startDate = 'yyyy-MM-dd';
+// const endDate = 'yyyy-MM-dd';
 
 const base_URL = 'https://api.nasa.gov/';
-const dateString = 'startDate=' + startDate + '&endDate=' + endDate;
+// const dateString = 'startDate=' + startDate + '&endDate=' + endDate;
 const apiKey1 = '&api_key=' + Constants.API_KEY; //with &
 const apiKey2 = '?api_key=' + Constants.API_KEY; //with ?
 
@@ -16,19 +16,19 @@ const apiKey2 = '?api_key=' + Constants.API_KEY; //with ?
 // CME - Coronal Mass Injection
 // GST - Geomagnetic Storm
 // FLR - Solar Flare
-const DONKI_notification =
-  base_URL + 'DONKI/notifications?' + dateString + '&type=all' + apiKey1;
-const DONKI_CME = base_URL + 'DONKI/CME?' + dateString + '&api_key=' + apiKey1;
-const DONKI_GST = base_URL + 'DONKI/GST?' + dateString + '&api_key=' + apiKey1;
-const DONKI_FLR = base_URL + 'DONKI/FLR?' + dateString + '&api_key=' + apiKey1;
+// const DONKI_notification =
+//   base_URL + 'DONKI/notifications?' + dateString + '&type=all' + apiKey1;
+
+// const DONKI_GST = base_URL + 'DONKI/GST?' + dateString + '&api_key=' + apiKey1;
+// const DONKI_FLR = base_URL + 'DONKI/FLR?' + dateString + '&api_key=' + apiKey1;
 
 const APIs = {
-  async getTodayImage(){
+  async getTodayImage() {
     const todaysImage = base_URL + 'planetary/apod?' + apiKey1;
     return fetch(todaysImage)
       .then(response => response.json())
       .then(json => {
-        console.log('title: '+json.title);
+        console.log('title: ' + json.title);
         return json;
       })
       .catch(error => {
@@ -91,20 +91,59 @@ const APIs = {
       .then(response => response.json())
       .then(json => {
         return json.collection.items;
-      }).catch(error => {
+      })
+      .catch(error => {
         console.log(error);
       });
   },
 
-  async getQueryResultImages(api_url){
+  async getQueryResultImages(api_url) {
     return fetch(api_url)
-    .then(response => response.json())
-    .then(imagesArray => {
-      return imagesArray;
-    }).catch(error => {
-      console.log('Error: '+error);
-    })
-  }
+      .then(response => response.json())
+      .then(imagesArray => {
+        return imagesArray;
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+      });
+  },
+
+  async get_DONKI_CME_api(dateString) {
+    console.log('date = ' + dateString);
+    const DONKI_CME = base_URL + 'DONKI/CME?' + dateString + apiKey1;
+    return fetch('https://api.nasa.gov/DONKI/CME?startDate=2023-12-17&endDate=2023-12-27&api_key=DEMO_KEY')
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+      });
+  },
+
+  async get_DONKI_GMS_api(dateString) {
+    const DONKI_GMS = base_URL + 'DONKI/GMS?' + dateString + apiKey1;
+    return fetch(DONKI_GMS)
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+      });
+  },
+
+  async get_DONKI_SF_api(dateString) {
+    const DONKI_SF = base_URL + 'DONKI/SF?' + dateString + apiKey1;
+    return fetch(DONKI_SF)
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+      });
+  },
 };
 
 export default APIs;

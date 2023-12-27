@@ -5,6 +5,7 @@ import api from '../api/NasaAPIs';
 import {ScrollView} from 'react-native-gesture-handler';
 
 export default function Home() {
+  const [isLoading, setLoading] = useState(false);
   const [imageMetadata, setImageMetadata] = useState({
     date: '',
     explanation: '',
@@ -18,6 +19,7 @@ export default function Home() {
 
   const fetchImage = async () => {
     const json = await api.getTodayImage();
+    setLoading(true);
     setImageMetadata({
       date: json.date,
       explanation: json.explanation,
@@ -29,12 +31,12 @@ export default function Home() {
     <ScrollView>
       <View>
         <Text style={styles.imageTitle}>Astronomy picture of the day</Text>
-        <Image
+        {isLoading && <Image
           style={styles.imageContainer}
           source={{uri: imageMetadata.url}}
-        />
-        <Text style={styles.text}>{imageMetadata.title}</Text>
-        <Text style={styles.textExplanation}>{imageMetadata.explanation}</Text>
+        />}
+        {isLoading && <Text style={styles.text}>{imageMetadata.title}</Text>}
+        {isLoading && <Text style={styles.textExplanation}>{imageMetadata.explanation}</Text>}
       </View>
     </ScrollView>
   );
@@ -62,9 +64,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // color: 'black',
   },
-  textExplanation:{
-    fontSize:18,
-    color:'black',
-    padding:18
-  }
+  textExplanation: {
+    fontSize: 18,
+    color: 'black',
+    padding: 18,
+  },
 });

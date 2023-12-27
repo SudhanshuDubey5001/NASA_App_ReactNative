@@ -3,11 +3,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import GlobalProps from '../global/GlobalStylesConstants'
 import Home from "../screens/Home";
-import Donki from "../screens/Donki";
+import Donki from "../screens/DONKI/Donki";
 import Earth from "../screens/Earth";
 import MarsRover from "../screens/MarsRover";
 import NasaLibrary from "../screens/NasaLibrary";
 import Header from '../components/Header'
+import DONKIStack from "./DONKIStack";
 
 const Drawer = createDrawerNavigator();
 
@@ -15,7 +16,7 @@ export default function Navigator() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="Home"
+        initialRouteName="DONKI"
         screenOptions={{
           headerStyle: { backgroundColor: GlobalProps.headerBackgroundColor },
           headerTintColor: GlobalProps.headerTextColor,
@@ -36,7 +37,7 @@ export default function Navigator() {
         />
         <Drawer.Screen
           name="DONKI"
-          component={Donki}
+          component={DONKIStack}
           options={({ navigation }) => {
             return {
               headerTitle: () => (

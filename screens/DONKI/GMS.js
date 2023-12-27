@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export default function Donki() {
+export default function GeomagneticStorm() {
   return (
     <View style = {styles.container}>
-      <Text>Donki screen</Text>
+      <Text>GMS screen</Text>
     </View>
   );
 }
