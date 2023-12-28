@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Donki from "../screens/DONKI/Donki";
-import CoronalMassEjection from "../screens/DONKI/CME";
-import GeomagneticStorm from "../screens/DONKI/GMS";
-import SolarFlare from "../screens/DONKI/SF";
+import DONKI_InformationScreen from "../screens/DONKI/DONKI_InformationScreen";
+import Notifications from "../screens/DONKI/Notifications";
+import Routes from "./Routes";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,16 +19,12 @@ export default function DONKIStack() {
         component={Donki}
       />
       <Stack.Screen
-        name="CME"
-        component={CoronalMassEjection}
+        name={Routes.DONKI_INFORMATION}
+        component={DONKI_InformationScreen}
       />
       <Stack.Screen
-        name="GMS"
-        component={GeomagneticStorm}
-      />
-      <Stack.Screen
-        name="SF"
-        component={SolarFlare}
+        name={Routes.DONKI_NOTIFICATIONS}
+        component={Notifications}
       />
     </Stack.Navigator>
   );

@@ -18,13 +18,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     elevation: 5,
-    backgroundColor: Colors.primary,
+    backgroundColor: 'white',
   },
   text: {
     fontSize: 20,
     color: 'black',
     padding: 15,
     alignSelf: 'center',
-    color: 'white',
   },
 });

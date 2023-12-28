@@ -1,4 +1,4 @@
-const MockData = [
+const mockData_CMS_DONKI = [
   {
     activityID: '2023-12-17T01:36:00-CME-001',
     catalog: 'M2M_CATALOG',
@@ -181,4 +181,4 @@ const MockData = [
   },
 ];
 
-export default MockData;
+export default mockData_CMS_DONKI;

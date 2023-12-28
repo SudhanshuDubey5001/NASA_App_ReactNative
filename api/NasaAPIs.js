@@ -9,8 +9,8 @@ import HelpingFunctions from '../utils/HelpingFunctions';
 
 const base_URL = 'https://api.nasa.gov/';
 // const dateString = 'startDate=' + startDate + '&endDate=' + endDate;
-const apiKey1 = '&api_key=' + Constants.API_KEY; //with &
-const apiKey2 = '?api_key=' + Constants.API_KEY; //with ?
+const apiKey_AND = '&api_key=' + Constants.API_KEY; //with &
+const apiKey_Question = '?api_key=' + Constants.API_KEY; //with ?
 
 // Space Weather Database Of Notifications, Knowledge, Information (DONKI) -
 // CME - Coronal Mass Injection
@@ -24,7 +24,7 @@ const apiKey2 = '?api_key=' + Constants.API_KEY; //with ?
 
 const APIs = {
   async getTodayImage() {
-    const todaysImage = base_URL + 'planetary/apod?' + apiKey1;
+    const todaysImage = base_URL + 'planetary/apod?' + apiKey_AND;
     return fetch(todaysImage)
       .then(response => response.json())
       .then(json => {
@@ -39,7 +39,8 @@ const APIs = {
   async getEarthImage(date) {
     // Daily imagery collected by DSCOVR's Earth Polychromatic Imaging Camera (EPIC) instrument
     if (date == '') date = HelpingFunctions.getDate('');
-    const EPIC_imageName = base_URL + 'EPIC/api/natural/date/' + date + apiKey2;
+    const EPIC_imageName =
+      base_URL + 'EPIC/api/natural/date/' + date + apiKey_Question;
     return fetch(EPIC_imageName)
       .then(response => response.json())
       .then(json => {
@@ -52,7 +53,7 @@ const APIs = {
           '/jpg/' +
           imageName +
           '.jpg' +
-          apiKey2
+          apiKey_Question
         );
       })
       .catch(error => {
@@ -67,7 +68,7 @@ const APIs = {
       'mars-photos/api/v1/rovers/' +
       rover_name +
       '/photos?sol=1000' +
-      apiKey1;
+      apiKey_AND;
     return fetch(MARS_ROVER_PICS_API)
       .then(response => response.json())
       .then(json => {
@@ -110,8 +111,8 @@ const APIs = {
 
   async get_DONKI_CME_api(dateString) {
     console.log('date = ' + dateString);
-    const DONKI_CME = base_URL + 'DONKI/CME?' + dateString + apiKey1;
-    return fetch('https://api.nasa.gov/DONKI/CME?startDate=2023-12-17&endDate=2023-12-27&api_key=DEMO_KEY')
+    const DONKI_CME = base_URL + 'DONKI/CME?' + dateString + apiKey_AND;
+    return fetch(DONKI_CME)
       .then(response => response.json())
       .then(json => {
         return json;
@@ -122,7 +123,7 @@ const APIs = {
   },
 
   async get_DONKI_GMS_api(dateString) {
-    const DONKI_GMS = base_URL + 'DONKI/GMS?' + dateString + apiKey1;
+    const DONKI_GMS = base_URL + 'DONKI/GMS?' + dateString + apiKey_AND;
     return fetch(DONKI_GMS)
       .then(response => response.json())
       .then(json => {
@@ -134,8 +135,46 @@ const APIs = {
   },
 
   async get_DONKI_SF_api(dateString) {
-    const DONKI_SF = base_URL + 'DONKI/SF?' + dateString + apiKey1;
+    const DONKI_SF = base_URL + 'DONKI/SF?' + dateString + apiKey_AND;
     return fetch(DONKI_SF)
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+      });
+  },
+
+  async get_DONKI_Notifications_api(startDate, endDate) {
+    const DONKI_Noti =
+      base_URL +
+      'DONKI/notifications?startDate=' +
+      startDate +
+      '&endDate=' +
+      endDate +
+      '&type=report' +
+      apiKey_AND;
+    console.log('api = ' + DONKI_Noti);
+    return fetch(DONKI_Noti)
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      })
+      .catch(error => {
+        console.log('Error: ' + error);
+      });
+  },
+
+  async getDONKI_Information_api(type) {
+    const DONKI_Noti =
+      base_URL +
+      'DONKI/notifications?startDate=yyyy-MM-dd&endDate=yyyy-MM-dd&type=' +
+      type +
+      apiKey_AND;
+    apiKey_AND;
+    console.log('api = ' + DONKI_Noti);
+    return fetch(DONKI_Noti)
       .then(response => response.json())
       .then(json => {
         return json;

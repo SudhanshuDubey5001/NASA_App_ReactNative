@@ -1,45 +1,175 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import GlobalProps from '../../global/GlobalProps';
 import HotDogButton from '../../components/HotDogButton';
 import TextualData from '../../repository/TextualData';
+import NotificationsCard from '../../components/DONKI_cards/NotificationsCard';
+import InfinitePager from 'react-native-infinite-pager';
+import {ScrollView} from 'react-native-gesture-handler';
+import MockNotification_DONKI from '../../MockData/mockNotificationsData_DONKI';
+import api from '../../api/NasaAPIs';
+import HelpingFunctions from '../../utils/HelpingFunctions';
+import Colors from '../../global/Colors';
+import Routes from '../../routes/Routes';
 
 export default function Donki({navigation}) {
+  const [notificationMessages, setNotiMessages] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
-    const navigate_CME =() => {
-      navigation.navigate('CME');
-    }
-    
-    const navigate_GMS =() => {
-      navigation.navigate('GMS');
-    }
-    
-    const navigate_SF =() => {
-      navigation.navigate('SF');
-    }
+  const navigate_infoScreen = infoType => {
+    navigation.navigate(Routes.DONKI_INFORMATION, infoType);
+  };
+
+  const onPressNotification = item => {
+    navigation.navigate(Routes.DONKI_NOTIFICATIONS, item);
+  };
+
+  const fetchNotifications = async () => {
+    // getting reports of only yesterday
+    const startDate = HelpingFunctions.getYesterdayDate();
+    const endDate = startDate;
+    // const reports = await api.get_DONKI_Notifications_api(startDate, endDate); //API call
+    MockNotification_DONKI.map(report => {
+      const summaryRegex = /## Summary:([\s\S]*?)(?=\n##|$)/;
+      const matchS = report.messageBody.match(summaryRegex);
+      const summary = matchS ? matchS[1].trim() : '';
+
+      const titleRegex = /## Message Type:(.*?)(?=\n##|$)/s;
+      const matchT = report.messageBody.match(titleRegex);
+      const title = matchT ? matchT[1].trim() : '';
+      console.log('title: ' + title);
+
+      const message = {
+        key: report.messageID,
+        fullMessageBody: report.messageBody,
+        messageTitle: title,
+        messageSummary: summary,
+      };
+      setNotiMessages(prevData => {
+        return [...prevData, message];
+      });
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    //reset first
+    setLoading(true);
+    setNotiMessages([]);
+    fetchNotifications();
+  }, []);
 
   return (
-    <View style={GlobalProps.container}>
-      <Text style={GlobalProps.titleText}>
-        Space Weather Database Of Notifications, Knowledge, Information (DONKI)
-      </Text>
-      <HotDogButton title={'Coronal Mass Ejection'} onPressAction={navigate_CME}/>
-      <HotDogButton title={'Gemagnetic Storm'} onPressAction={navigate_GMS}/>
-      <HotDogButton title={'Solar Flare'} onPressAction={navigate_SF}/>
-      <Text style = {styles.text}>{TextualData.DONKI_explanation}</Text>
-    </View>
+    <ScrollView>
+      <View style={GlobalProps.container}>
+        <Text style={GlobalProps.titleText}>
+          Space Weather Database Of Notifications, Knowledge, Information
+          (DONKI)
+        </Text>
+
+        <View style={styles.containerBody}>
+          <Text style={styles.text}>{TextualData.DONKI_explanation}</Text>
+        </View>
+
+        {/* Weekly report */}
+        <Text style={styles.subTitle}>Weekly reports</Text>
+        {isLoading ? (
+          <ActivityIndicator
+            style={GlobalProps.spinnerStyle}
+            size="large"
+            color={Colors.primary}
+          />
+        ) : (
+          <FlatList
+            style={styles.list}
+            data={notificationMessages}
+            pagingEnabled={true}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => onPressNotification(item)}>
+                <NotificationsCard item={item} />
+              </TouchableOpacity>
+            )}
+            horizontal={true}
+          />
+        )}
+
+        <View style={styles.buttonsView}>
+          <Text style={styles.subTitle}> Informations </Text>
+          <HotDogButton
+            title={'Coronal Mass Ejection (CME)'}
+            onPressAction={() => navigate_infoScreen('CME')}
+          />
+          <HotDogButton
+            title={'Gemagnetic Storm (GST)'}
+            onPressAction={() => navigate_infoScreen('GST')}
+          />
+
+          <HotDogButton
+            title={'Solar Flare (FLR)'}
+            onPressAction={() => navigate_infoScreen('FLR')}
+          />
+          <HotDogButton
+            title={'Interplanetary Shock (IPS)'}
+            onPressAction={() => navigate_infoScreen('IPS')}
+          />
+          <HotDogButton
+            title={'Solar Energetic Particle (SEP)'}
+            onPressAction={() => navigate_infoScreen('SEP')}
+          />
+          <HotDogButton
+            title={'Magnetopause Crossing (MPC)'}
+            onPressAction={() => navigate_infoScreen('MPC')}
+          />
+          <HotDogButton
+            title={'Radiation Belt Enhancement (RBE)'}
+            onPressAction={() => navigate_infoScreen('RBE')}
+          />
+          <HotDogButton
+            title={'Hight Speed Stream (HSS)'}
+            onPressAction={() => navigate_infoScreen('HSS')}
+          />
+        </View>
+        <View style={styles.spaceVertical}></View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  containerBody: {
     padding: 20,
   },
   text: {
-    marginTop:10,
+    marginTop: 10,
     fontSize: 18,
     padding: 10,
-    color:'black'
+    color: 'black',
+  },
+  list: {
+    margin: 10,
+    height: 250,
+  },
+  subTitle: {
+    fontSize: 26,
+    marginTop: 10,
+    marginBottom: 20,
+    marginHorizontal: 10,
+    color: 'black',
+    alignSelf: 'center',
+  },
+  buttonsView: {
+    paddingHorizontal: 20,
+  },
+  spaceVertical: {
+    marginVertical: 30,
   },
 });

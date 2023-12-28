@@ -36,7 +36,14 @@ const HelpingFunctions = {
     return {startDate: tenDaysAgoFormattedDate, endDate: todayDate};
   },
 
-  formatDateTime(inputDate){
+  getYesterdayDate() {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    return yesterday.toISOString().split('T')[0];
+  },
+
+  formatDateTime(inputDate) {
     const options = {
       day: 'numeric',
       month: 'numeric',
@@ -50,6 +57,35 @@ const HelpingFunctions = {
     const date = new Date(inputDate);
     return date.toLocaleDateString('en-GB', options);
   },
+
+  convertAllDateTimeToCorrectFormat(inputString) {
+    const formattedString = inputString.replace(
+      /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z)/g,
+      (match, dateTime) => {
+        const date = new Date(dateTime);
+        const formattedDate = `${date.getDate()}/${
+          date.getMonth() + 1
+        }/${date.getFullYear()}`;
+        const formattedTime = `${date.getHours()}:${(
+          '0' + date.getMinutes()
+        ).slice(-2)} ${date.getHours() >= 12 ? 'PM' : 'AM'}`;
+        return `${formattedDate} ${formattedTime}`;
+      },
+    );
+    return formattedString;
+  },
+
+  get_Information_TitleSummaryDateTimeFromMessageBody(inputString){
+    const summaryRegex = /## Summary:([\s\S]*?)(?=\n##|$)/;
+      const matchS = inputString.match(summaryRegex);
+      const summary = matchS ? matchS[1].trim() : '';
+
+      const titleRegex = /## Message Type:(.*?)(?=\n##|$)/s;
+      const matchT = inputString.match(titleRegex);
+      const title = matchT ? matchT[1].trim() : '';
+
+      return {title: title, summary: summary};
+  }
 };
 
 export default HelpingFunctions;

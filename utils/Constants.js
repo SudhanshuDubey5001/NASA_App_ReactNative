@@ -1,6 +1,16 @@
 const Constants = {
-    // API_KEY: 'pDjQoyP0l4lliW4NiwKNuTundrtzBqeGAMRZTkq6',
-    API_KEY: 'DEMO_KEY',
-}
+//   API_KEY: 'pDjQoyP0l4lliW4NiwKNuTundrtzBqeGAMRZTkq6',
+  API_KEY: 'DEMO_KEY',
+  DONKI_TYPE: {
+    CORONAL_MASS_EJECTION: 'CME',
+    GEOMAGNETIC_STORM: 'GST',
+    INTERPLANETARY_SHOCK: 'IPS',
+    SOLAR_FLARE: 'FLR',
+    SOLAR_ENERGETIC_PARTICLE: 'SEP',
+    MAGNETOPAUSE_CROSSING: 'MPC',
+    RADIATION_BELT_ENHANCEMENT: 'RBE',
+    HIGH_SPEED_STREAM: 'HSS',
+  },
+};
 
 export default Constants;

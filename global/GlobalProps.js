@@ -18,6 +18,9 @@ const GlobalProps = {
     // paddingRight: 20,
     backgroundColor: 'white',
   },
+  spinnerStyle:{
+    marginVertical:100,
+  }
 };
 
 export default GlobalProps;
