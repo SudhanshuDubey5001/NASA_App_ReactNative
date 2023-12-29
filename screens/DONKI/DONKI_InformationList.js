@@ -18,28 +18,66 @@ import DONKI_InformationCard from '../../components/DONKI_cards/DONKI_Informatio
 import Dialog from 'react-native-dialog';
 import Colors from '../../global/Colors';
 import MockNotification_DONKI from '../../MockData/mockNotificationsData_DONKI';
+import Routes from '../../routes/Routes';
 
-export default function DONKI_InformationScreen({route}) {
+export default function DONKI_InformationList({route,navigation}) {
   const infoType = route.params;
   const [messages, setMessages] = useState([]);
+  const [infoFullName, setInfoFullName] = useState('');
 
-  // useEffect(() => {
-  //   setMessages([]);
-  //   setLoading(true);
-  //   fetchInformationData(infoType);
-  // }, []);
+  const getTypeFullName = () => {
+    switch (infoType) {
+      case 'CME':
+        setInfoFullName('Coronal Mass Ejection');
+        break;
+      case 'GST':
+        setInfoFullName('Geomagnetic Storm');
+        break;
+      case 'IPS':
+        setInfoFullName('Interplanetary Shock');
+        break;
+      case 'FLR':
+        setInfoFullName('Solar Flare');
+        break;
+      case 'SEP':
+        setInfoFullName('Solar Energetic Particle');
+        break;
+      case 'MPC':
+        setInfoFullName('Magnetopause Crossing');
+        break;
+      case 'RBE':
+        setInfoFullName('Raidation Belt Enhancement');
+        break;
+      case 'HSS':
+        setInfoFullName('High Speed Stream');
+        break;
+    }
+  };
+
+  useEffect(() => {
+    getTypeFullName();
+    setMessages([]);
+    setLoading(true);
+    fetchInformationData(infoType);
+  }, []);
 
   const fetchInformationData = async type => {
     // const messageJSONArray = await api.getDONKI_Information_api(type); //API call!!!
-    MockNotification_DONKI.map(message => {
-      const item = HelpingFunctions.get_Information_TitleSummaryDateTimeFromMessageBody(message.messageBody);
+    // messageJSONArray.map(message => {
+    MockNotification_DONKI.map(message => {      //Mock data
+      const item =
+        HelpingFunctions.get_Information_TitleSummaryDateTimeFromMessageBody(
+          message.messageBody,
+        );
+      
+      console.log('Messag URL = '+ message.messageURL);
       const data = {
         key: message.messageID,
-        fullMessageBody: message.messageBody,
-        dateTime: HelpingFunctions.formatDateTime(message.messageIssueTime),
         messageTitle: item.title,
         messageSummary: item.summary,
-        messageURL: item.messageURL,
+        messageURL: message.messageURL,
+        fullMessageBody: message.messageBody,
+        messageDateTime: HelpingFunctions.formatDateTime(message.messageIssueTime),
       };
       setMessages(prevData => {
         return [...prevData, data];
@@ -76,22 +114,13 @@ export default function DONKI_InformationScreen({route}) {
     });
   };
 
-  const onPressItem = url => {
-    setURL(url);
-    setDialogVisible(true);
-  };
-
-  const handleConfirm = () => {
-    Linking.openURL(url);
-  };
-
-  const handleCancel = () => {
-    setDialogVisible(false);
+  const onPressInformation = info => {
+    navigation.navigate(Routes.DONKI_DETAILED_ANALYSIS, info);
   };
 
   return (
     <View style={GlobalProps.container}>
-      {/* {isLoading ? (
+      {isLoading ? (
         <ActivityIndicator
           style={GlobalProps.spinnerStyle}
           size={'large'}
@@ -103,27 +132,18 @@ export default function DONKI_InformationScreen({route}) {
           renderItem={({item}) => (
             <TouchableOpacity
               activeOpacity={1}
-              onPress={() => onPressItem(item.messageURL)}>
-              <CMECards cmeData={item} />
+              onPress={() => onPressInformation(item)}>
+              <DONKI_InformationCard info={item} />
             </TouchableOpacity>
           )}
           ListHeaderComponent={
             <View style={styles.headerStyle}>
-              <Text style={styles.titleText}>Coronal Mass Ejection</Text>
-              <Text style={styles.subText}>Last 10 days</Text>
+              <Text style={styles.titleText}>{infoFullName}</Text>
+              <Text style={styles.subText}>Last 30 days</Text>
             </View>
           }
         />
-      )} */}
-      <Dialog.Container visible={isDialogVisible}>
-        <Dialog.Title>Confirmation</Dialog.Title>
-        <Dialog.Description>
-          Do you want to open the link to NASA website for detailed review on
-          the selected CME?
-        </Dialog.Description>
-        <Dialog.Button label="Cancel" onPress={handleCancel} />
-        <Dialog.Button label="Confirm" onPress={handleConfirm} />
-      </Dialog.Container>
+      )}
     </View>
   );
 }

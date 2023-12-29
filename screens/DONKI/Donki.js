@@ -24,11 +24,11 @@ export default function Donki({navigation}) {
   const [isLoading, setLoading] = useState(true);
 
   const navigate_infoScreen = infoType => {
-    navigation.navigate(Routes.DONKI_INFORMATION, infoType);
+    navigation.navigate(Routes.DONKI_INFORMATION_LIST, infoType);
   };
 
   const onPressNotification = item => {
-    navigation.navigate(Routes.DONKI_NOTIFICATIONS, item);
+    navigation.navigate(Routes.DONKI_DETAILED_ANALYSIS, item);
   };
 
   const fetchNotifications = async () => {
@@ -36,7 +36,8 @@ export default function Donki({navigation}) {
     const startDate = HelpingFunctions.getYesterdayDate();
     const endDate = startDate;
     // const reports = await api.get_DONKI_Notifications_api(startDate, endDate); //API call
-    MockNotification_DONKI.map(report => {
+    // reports.map(report => {
+      MockNotification_DONKI.map(report => {                         //mock data
       const summaryRegex = /## Summary:([\s\S]*?)(?=\n##|$)/;
       const matchS = report.messageBody.match(summaryRegex);
       const summary = matchS ? matchS[1].trim() : '';

@@ -2,68 +2,76 @@ import {StyleSheet, View, Text, Button} from 'react-native';
 import {Image} from 'react-native-reanimated/lib/typescript/Animated';
 import {Icon} from 'react-native-vector-icons/FontAwesome';
 import HelpingFunctions from '../../utils/HelpingFunctions';
+import Dialog from 'react-native-dialog';
+import {useState} from 'react';
+import Colors from '../../global/Colors';
 
-export default function DONKI_InformationCard({cmeData: info}) {
+export default function DONKI_InformationCard({info}) {
+  const [isDialogVisible, setDialogVisible] = useState(false);
+  const [url, setURL] = useState('');
+
+  const onPressLink = url => {
+    setURL(url);
+    setDialogVisible(true);
+  };
+
+  const handleConfirm = () => {
+    Linking.openURL(url);
+  };
+
+  const handleCancel = () => {
+    setDialogVisible(false);
+  };
+
   return (
-    <View style={styles.card}>
-      <View style={styles.textGroup1}>
-        <Text style={styles.cardTextTitle}>Title:</Text>
-        <Text style={styles.cardText}>{info.messageTitle}</Text>
+    <View>
+      <View style={styles.card}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.textTitle}>{info.messageTitle}</Text>
+        </View>
+        <Text style={styles.textBody} numberOfLines={10} ellipsizeMode="tail">
+          {info.messageSummary}
+        </Text>
       </View>
-      <View style={styles.textGroup1}>
-        <Text style={styles.cardTextTitle}>Start Time:</Text>
-        <Text style={styles.cardText}>{HelpingFunctions.formatDateTime(info.startTime)}</Text>
-      </View>
-      <View style={styles.textGroup1}>
-        <Text style={styles.cardTextTitle}>Source Location:</Text>
-        <Text style={styles.cardText}>{info.sourceLocation}</Text>
-      </View>
-      <View style={styles.textGroup2}>
-        <Text style={styles.cardTextTitle}>Instruments:</Text>
-        {info.instruments.map(instrument => {
-          return (
-            <View style={styles.bullets}>
-              <Text style={styles.cardText}>- {instrument.displayName}</Text>
-            </View>
-          );
-        })}
-      </View>
-      <View style={styles.textGroup2}>
-        <Text style={styles.cardTextTitle}>Note</Text>
-        <Text style={styles.cardText}>{info.note}</Text>
-      </View>
+      <Dialog.Container visible={isDialogVisible}>
+        <Dialog.Title>Confirmation</Dialog.Title>
+        <Dialog.Description>
+          Do you want to open the link to NASA website for detailed review on
+          the selected CME?
+        </Dialog.Description>
+        <Dialog.Button label="Cancel" onPress={handleCancel} />
+        <Dialog.Button label="Confirm" onPress={handleConfirm} />
+      </Dialog.Container>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  dateTime: {
+    fontSize: 15,
+    color: '#333',
+    paddingVertical:10,
+    fontWeight:'bold',
+  },
   card: {
     backgroundColor: 'white',
-    margin: 10,
+    margin: 20,
     elevation: 10,
     borderRadius: 10,
+    borderColor: 'black',
   },
-  cardTextTitle: {
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+  titleContainer: {
+    padding: 10,
+    backgroundColor: Colors.tertiary,
+  },
+  textTitle:{
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#333',
+  },
+  textBody: {
     fontSize: 17,
+    padding: 10,
     color: 'black',
-    // fontWeight:'bold',
-    fontFamily: 'LibreBaskerville-Bold',
-  },
-  cardText: {
-    padding:10,
-    fontSize: 17,
-    fontFamily: 'LibreBaskerville-Regular',
-    color:'#333'
-  },
-  textGroup1: {
-    flexDirection: 'row',
-  },
-  textGroup2: {},
-  bullets: {
-    flex: 1,
-    flexDirection: 'row',
   },
 });
