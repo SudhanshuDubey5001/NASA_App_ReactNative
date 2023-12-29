@@ -1,44 +1,99 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import GlobalProps from '../../global/GlobalProps';
 import {ScrollView} from 'react-native-gesture-handler';
 import HelpingFunctions from '../../utils/HelpingFunctions';
 import Colors from '../../global/Colors';
 import DONKI_Information_Footer from '../../components/DONKI_cards/DONKI_footer';
+import FastImage from 'react-native-fast-image';
+import ImageView from 'react-native-image-viewing';
 
 export default function DONKI_DetailedAnalysis({route}) {
   const message = route.params;
   const afterDateTimeCorrection =
     HelpingFunctions.convertAllDateTimeToCorrectFormat(message.messageSummary);
 
+  const modifiedMessageBody = HelpingFunctions.get_HTTP_links(
+    afterDateTimeCorrection,
+  );
+
+  const images = [];
+  const [visible, setIsVisible] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  modifiedMessageBody.httpLinks.map(image => {
+    images.push({uri: image});
+  });
+
   return (
-    <ScrollView>
-      <View style={styles.headerStyle}>
-        <Text style={styles.titleText}>{message.messageTitle}</Text>
-        <Text style={styles.subText}>{message.messageDateTime}</Text>
-      </View>
-      <Text style={styles.text}>{afterDateTimeCorrection}</Text>
-      <DONKI_Information_Footer url={message.messageURL} />
-    </ScrollView>
+    <View style={{flex: 1}}>
+      <ScrollView style={{flex: 1}}>
+        <View style={styles.headerStyle}>
+          <Text style={styles.titleText}>{message.messageTitle}</Text>
+          <Text style={styles.subText}>{message.messageDateTime}</Text>
+        </View>
+        <View style={styles.bodyStyle}>
+          <Text style={styles.text}>
+            {modifiedMessageBody.modifiedMessageBody}
+          </Text>
+          {modifiedMessageBody.httpLinks.map((image, index) => (
+            <TouchableOpacity
+              onPress={() => {
+                setIsVisible(true);
+                setIndex(index);
+              }}>
+              <FastImage
+                resizeMode="contain"
+                style={styles.imageContainer}
+                source={{
+                  uri: image,
+                }}
+              />
+            </TouchableOpacity>
+          ))}
+
+          <ImageView
+            images={images}
+            imageIndex={index}
+            visible={visible}
+            onRequestClose={() => setIsVisible(false)}
+          />
+        </View>
+        <DONKI_Information_Footer url={message.messageURL} />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  footer: {
-    flex: 1,
-    justifyContent: 'flex-end',
+  imageContainer: {
+    width: '100%',
+    height: 200,
+    margin: 10,
+    alignSelf: 'center',
+    backgroundColor: 'black',
   },
+  bodyStyle: {
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 50,
+    marginHorizontal: 10,
+  },
+  footer: {},
   container: {
     flex: 1,
     padding: 20,
   },
   text: {
-    padding: 10,
     color: 'black',
     fontSize: 18,
-    marginHorizontal: 10,
-    marginTop:10,
-    marginBottom:100,
     flex: 1,
   },
   titleText: {

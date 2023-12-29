@@ -16,7 +16,7 @@ export default function Navigator() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="DONKI"
+        initialRouteName="Earth"
         screenOptions={{
           headerStyle: { backgroundColor: GlobalProps.headerBackgroundColor },
           headerTintColor: GlobalProps.headerTextColor,

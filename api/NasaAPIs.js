@@ -109,44 +109,7 @@ const APIs = {
       });
   },
 
-  async get_DONKI_CME_api(dateString) {
-    console.log('date = ' + dateString);
-    const DONKI_CME = base_URL + 'DONKI/CME?' + dateString + apiKey_AND;
-    return fetch(DONKI_CME)
-      .then(response => response.json())
-      .then(json => {
-        return json;
-      })
-      .catch(error => {
-        console.log('Error: ' + error);
-      });
-  },
-
-  async get_DONKI_GMS_api(dateString) {
-    const DONKI_GMS = base_URL + 'DONKI/GMS?' + dateString + apiKey_AND;
-    return fetch(DONKI_GMS)
-      .then(response => response.json())
-      .then(json => {
-        return json;
-      })
-      .catch(error => {
-        console.log('Error: ' + error);
-      });
-  },
-
-  async get_DONKI_SF_api(dateString) {
-    const DONKI_SF = base_URL + 'DONKI/SF?' + dateString + apiKey_AND;
-    return fetch(DONKI_SF)
-      .then(response => response.json())
-      .then(json => {
-        return json;
-      })
-      .catch(error => {
-        console.log('Error: ' + error);
-      });
-  },
-
-  async get_DONKI_Notifications_api(startDate, endDate) {
+  async get_DONKI_Notifications_report(startDate, endDate) {
     const DONKI_Noti =
       base_URL +
       'DONKI/notifications?startDate=' +
@@ -166,7 +129,7 @@ const APIs = {
       });
   },
 
-  async getDONKI_Information_api(type) {
+  async get_DONKI_Notifications_information(type) {
     const DONKI_Noti =
       base_URL +
       'DONKI/notifications?startDate=yyyy-MM-dd&endDate=yyyy-MM-dd&type=' +

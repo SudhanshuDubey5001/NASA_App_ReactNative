@@ -36,11 +36,11 @@ const HelpingFunctions = {
     return {startDate: tenDaysAgoFormattedDate, endDate: todayDate};
   },
 
-  getYesterdayDate() {
+  getPastDate(daysBefore) {
     const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    return yesterday.toISOString().split('T')[0];
+    const pastDate = new Date(today);
+    pastDate.setDate(today.getDate() - daysBefore);
+    return pastDate.toISOString().split('T')[0];
   },
 
   formatDateTime(inputDate) {
@@ -75,17 +75,30 @@ const HelpingFunctions = {
     return formattedString;
   },
 
-  get_Information_TitleSummaryDateTimeFromMessageBody(inputString){
+  get_Information_TitleSummaryDateTimeFromMessageBody(inputString) {
     const summaryRegex = /## Summary:([\s\S]*?)(?=\n##|$)/;
-      const matchS = inputString.match(summaryRegex);
-      const summary = matchS ? matchS[1].trim() : '';
+    const matchS = inputString.match(summaryRegex);
+    const summary = matchS ? matchS[1].trim() : '';
 
-      const titleRegex = /## Message Type:(.*?)(?=\n##|$)/s;
-      const matchT = inputString.match(titleRegex);
-      const title = matchT ? matchT[1].trim() : '';
+    const titleRegex = /## Message Type:(.*?)(?=\n##|$)/s;
+    const matchT = inputString.match(titleRegex);
+    const title = matchT ? matchT[1].trim() : '';
 
-      return {title: title, summary: summary};
-  }
+    return {title: title, summary: summary};
+  },
+
+  get_HTTP_links(inputString) {
+    // Regular expression to match HTTP links
+    const linkRegex = /https?:\/\/\S+/gi;
+
+    const extractedLinks = [];
+
+    const modifiedString = inputString.replace(linkRegex, match => {
+      extractedLinks.push(match); 
+      return ''; 
+    });
+    return {modifiedMessageBody: modifiedString, httpLinks: extractedLinks};
+  },
 };
 
 export default HelpingFunctions;

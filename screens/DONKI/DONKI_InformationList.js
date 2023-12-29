@@ -1,13 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  Button,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Linking,
-  Animated,
   ActivityIndicator,
 } from 'react-native';
 import api from '../../api/NasaAPIs';
@@ -15,12 +12,11 @@ import HelpingFunctions from '../../utils/HelpingFunctions';
 import mockData_CMS_DONKI from '../../MockData/mockData_CMS_DONKI';
 import GlobalProps from '../../global/GlobalProps';
 import DONKI_InformationCard from '../../components/DONKI_cards/DONKI_InformationCard';
-import Dialog from 'react-native-dialog';
 import Colors from '../../global/Colors';
 import MockNotification_DONKI from '../../MockData/mockNotificationsData_DONKI';
 import Routes from '../../routes/Routes';
 
-export default function DONKI_InformationList({route,navigation}) {
+export default function DONKI_InformationList({route, navigation}) {
   const infoType = route.params;
   const [messages, setMessages] = useState([]);
   const [infoFullName, setInfoFullName] = useState('');
@@ -62,22 +58,24 @@ export default function DONKI_InformationList({route,navigation}) {
   }, []);
 
   const fetchInformationData = async type => {
-    // const messageJSONArray = await api.getDONKI_Information_api(type); //API call!!!
-    // messageJSONArray.map(message => {
-    MockNotification_DONKI.map(message => {      //Mock data
+    const messageJSONArray = await api.get_DONKI_Notifications_information(type); //API call!!!
+    messageJSONArray.map(message => {
+    // MockNotification_DONKI.map(message => {
+      //Mock data
       const item =
         HelpingFunctions.get_Information_TitleSummaryDateTimeFromMessageBody(
           message.messageBody,
         );
-      
-      console.log('Messag URL = '+ message.messageURL);
+
       const data = {
         key: message.messageID,
         messageTitle: item.title,
         messageSummary: item.summary,
         messageURL: message.messageURL,
         fullMessageBody: message.messageBody,
-        messageDateTime: HelpingFunctions.formatDateTime(message.messageIssueTime),
+        messageDateTime: HelpingFunctions.formatDateTime(
+          message.messageIssueTime,
+        ),
       };
       setMessages(prevData => {
         return [...prevData, data];
@@ -86,33 +84,7 @@ export default function DONKI_InformationList({route,navigation}) {
     });
   };
 
-  const [CME_data, setCME_date] = useState([]);
-  const [isDialogVisible, setDialogVisible] = useState(false);
-  const [url, setURL] = useState('');
   const [isLoading, setLoading] = useState(true);
-
-  const fetchCMEData = async () => {
-    // console.log('Fetching CME data...');
-    const date = HelpingFunctions.getTenDaysRange();
-    const dateString =
-      'startDate=' + date.startDate + '&endDate=' + date.endDate;
-    // const data = await api.get_DONKI_CME_api(dateString); //api call!!!
-    mockData_CMS_DONKI.map(cme => {
-      const cmeData = {
-        key: cme.activityID || Math.random(),
-        catalog: cme.catalog || 'Unavailable',
-        startTime: cme.startTime || '',
-        sourceLocation: cme.sourceLocation || 'Unavailable',
-        link: cme.link || 'Unavailable',
-        note: cme.note || 'Unavailable',
-        instruments: cme.instruments || [{displayname: 'Unavailable'}],
-      };
-      setCME_date(prevData => {
-        return [cmeData, ...prevData];
-      });
-      setLoading(false);
-    });
-  };
 
   const onPressInformation = info => {
     navigation.navigate(Routes.DONKI_DETAILED_ANALYSIS, info);
