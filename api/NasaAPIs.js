@@ -2,25 +2,9 @@ import React, {useState} from 'react';
 import Constants from '../utils/Constants';
 import HelpingFunctions from '../utils/HelpingFunctions';
 
-// const [startDate, setStartDate] = useState('yyyy-MM-dd');
-// const [endDate, setEndDate] = useState('yyyy-MM-dd');
-// const startDate = 'yyyy-MM-dd';
-// const endDate = 'yyyy-MM-dd';
-
 const base_URL = 'https://api.nasa.gov/';
-// const dateString = 'startDate=' + startDate + '&endDate=' + endDate;
 const apiKey_AND = '&api_key=' + Constants.API_KEY; //with &
 const apiKey_Question = '?api_key=' + Constants.API_KEY; //with ?
-
-// Space Weather Database Of Notifications, Knowledge, Information (DONKI) -
-// CME - Coronal Mass Injection
-// GST - Geomagnetic Storm
-// FLR - Solar Flare
-// const DONKI_notification =
-//   base_URL + 'DONKI/notifications?' + dateString + '&type=all' + apiKey1;
-
-// const DONKI_GST = base_URL + 'DONKI/GST?' + dateString + '&api_key=' + apiKey1;
-// const DONKI_FLR = base_URL + 'DONKI/FLR?' + dateString + '&api_key=' + apiKey1;
 
 const APIs = {
   async getTodayImage() {
@@ -61,14 +45,14 @@ const APIs = {
       });
   },
 
-  async getMarsRoverPhotos(rover_name) {
+  async getMarsRoverPhotos(camera) {
     //Mars Rover photos by Curiosity and Opportunity.
     const MARS_ROVER_PICS_API =
       base_URL +
-      'mars-photos/api/v1/rovers/' +
-      rover_name +
-      '/photos?sol=1000' +
+      'mars-photos/api/v1/rovers/curiosity/photos?sol=1000&camera=' +
+      camera +
       apiKey_AND;
+    console.log('API = '+MARS_ROVER_PICS_API);
     return fetch(MARS_ROVER_PICS_API)
       .then(response => response.json())
       .then(json => {

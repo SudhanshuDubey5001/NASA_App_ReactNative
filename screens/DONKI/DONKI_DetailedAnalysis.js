@@ -51,7 +51,7 @@ export default function DONKI_DetailedAnalysis({route}) {
               }}>
               <FastImage
                 resizeMode="contain"
-                style={styles.imageContainer}
+                style={GlobalProps.imageContainer}
                 source={{
                   uri: image,
                 }}
@@ -73,13 +73,6 @@ export default function DONKI_DetailedAnalysis({route}) {
 }
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    width: '100%',
-    height: 200,
-    margin: 10,
-    alignSelf: 'center',
-    backgroundColor: 'black',
-  },
   bodyStyle: {
     padding: 10,
     marginTop: 10,

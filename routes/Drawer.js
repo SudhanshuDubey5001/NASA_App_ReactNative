@@ -5,10 +5,11 @@ import GlobalProps from '../global/GlobalStylesConstants'
 import Home from "../screens/Home";
 import Donki from "../screens/DONKI/Donki";
 import Earth from "../screens/Earth";
-import MarsRover from "../screens/MarsRover";
+import MarsRover from "../screens/marsrover/MarsRover";
 import NasaLibrary from "../screens/NasaLibrary";
 import Header from '../components/Header'
 import DONKIStack from "./DONKIStack";
+import MarsRoverStack from "./MarsRoverStack";
 
 const Drawer = createDrawerNavigator();
 
@@ -16,7 +17,7 @@ export default function Navigator() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="Earth"
+        initialRouteName="Mars Rover"
         screenOptions={{
           headerStyle: { backgroundColor: GlobalProps.headerBackgroundColor },
           headerTintColor: GlobalProps.headerTextColor,
@@ -59,7 +60,7 @@ export default function Navigator() {
         />
         <Drawer.Screen
           name="Mars Rover"
-          component={MarsRover}
+          component={MarsRoverStack}
           options={({ navigation }) => {
             return {
               headerTitle: () => (

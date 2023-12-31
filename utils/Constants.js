@@ -1,6 +1,6 @@
 const Constants = {
-  API_KEY: 'pDjQoyP0l4lliW4NiwKNuTundrtzBqeGAMRZTkq6',
-//   API_KEY: 'DEMO_KEY',
+//   API_KEY: 'pDjQoyP0l4lliW4NiwKNuTundrtzBqeGAMRZTkq6',
+  API_KEY: 'DEMO_KEY',
   DONKI_TYPE: {
     CORONAL_MASS_EJECTION: 'CME',
     GEOMAGNETIC_STORM: 'GST',
