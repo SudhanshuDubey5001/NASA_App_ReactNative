@@ -45,14 +45,16 @@ const APIs = {
       });
   },
 
-  async getMarsRoverPhotos(camera) {
+  async getMarsRoverPhotos(camera,page) {
     //Mars Rover photos by Curiosity and Opportunity.
     const MARS_ROVER_PICS_API =
       base_URL +
       'mars-photos/api/v1/rovers/curiosity/photos?sol=1000&camera=' +
       camera +
+      '&page=' +
+      page +
       apiKey_AND;
-    console.log('API = '+MARS_ROVER_PICS_API);
+    console.log('API = ' + MARS_ROVER_PICS_API);
     return fetch(MARS_ROVER_PICS_API)
       .then(response => response.json())
       .then(json => {

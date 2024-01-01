@@ -4,7 +4,7 @@ const TextualData = {
   EPIC_explanation: 
   'The EPIC API provides information on the daily imagery collected by DSCOVR\'s Earth Polychromatic Imaging Camera (EPIC) instrument. Uniquely positioned at the Earth-Sun Lagrange point, EPIC provides full disc imagery of the Earth and captures unique perspectives of certain astronomical events such as lunar transits using a 2048x2048 pixel CCD (Charge Coupled Device) detector coupled to a 30-cm aperture Cassegrain telescope.',  
   MARS_ROVER_explanation:
-  'NASA has generously made available a captivating collection of images captured by the Curiosity rover, showcasing the Martian landscape from various camera angles.',
+  'NASA has generously made available a captivating collection of images captured by the Curiosity rover, showcasing the Martian landscape from various camera angles. \n\nThese publicly accessible images invite you to embark on a virtual journey across the Martian terrain. Feel free to scroll through the rich visual narrative captured by Curiosity and delve into the wonders of the Red Planet, as seen through Curiosity\'s different cameras.',  
 };
 
 export default TextualData;

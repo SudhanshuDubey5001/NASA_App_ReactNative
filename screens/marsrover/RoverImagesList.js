@@ -14,47 +14,113 @@ import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Cameras from './Cameras';
 import Colors from '../../global/Colors';
 import api from '../../api/NasaAPIs';
-import MockMarsRover from '../../MockData/MockMarsRover';
-import FastImage from 'react-native-fast-image';
+import MockMarsRover_FHAZ from '../../MockData/mars_rover_mockData/MockMarsRover_FHAZ';
+import ImageList from '../../components/mars_rover/ImageList';
+import MockMarsRover_CHEMCAM from '../../MockData/mars_rover_mockData/MockMarsRover_CHEMCAM';
+import MockMarsRover_MAST from '../../MockData/mars_rover_mockData/MockMarsRover_MAST';
+import MockMarsRover_NAVCAM from '../../MockData/mars_rover_mockData/MockMarsRover_NAVCAM';
+import MockMarsRover_RHAZ from '../../MockData/mars_rover_mockData/MockMarsRover_RHAZ';
 
-export default function RoverImagesList() {
+export default function RoverImagesList({route, navigation}) {
+//   const rover = route.params;
+//   console.log('Rover = '+rover);
+    
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [cams, setCams] = useState(Cameras);
-  const [marsRoverImages, setMarsRoverImages] = useState([]);
+  const [indexAdded, setIndexAdded] = useState([]);
+
+  // images array -->
+  const [FHAZ_list, setFHAZList] = useState([]);
+  const [CHEMCAM_list, setCHEMCAMList] = useState([]);
+  const [MAST_list, setMASTList] = useState([]);
+  const [RHAZ_list, setRHAZList] = useState([]);
+  const [NAVCAM_list, setNAVCAMList] = useState([]);
 
   useEffect(() => {
     //load the first index
-    console.log('Use effect ran!!!');
-    setMarsRoverImages([]);
+    cleanUpArrays();
+    setIndexAdded([]);
+    setIndexAdded(prevData => {
+      return [0, ...prevData];
+    });
     fetchPhotos(0);
   }, []);
+
+  const cleanUpArrays = () => {
+    setFHAZList([]);
+    setCHEMCAMList([]);
+    setMASTList([]);
+    setNAVCAMList([]);
+    setRHAZList([]);
+  };
 
   const getCameraCodeByIndex = index => {
     return Cameras.find(element => element.id == index);
   };
 
+  // mock data -->
+  const mockRover = camCode => {
+    switch (camCode) {
+      case 'FHAZ':
+        return MockMarsRover_FHAZ;
+      case 'CHEMCAM':
+        return MockMarsRover_CHEMCAM;
+      case 'MAST':
+        return MockMarsRover_MAST;
+      case 'NAVCAM':
+        return MockMarsRover_NAVCAM;
+      case 'RHAZ':
+        return MockMarsRover_RHAZ;
+    }
+  };
+
   const fetchPhotos = async index => {
-    setIsLoading(true);
-    const cam = getCameraCodeByIndex(index);
-    const images = await api.getMarsRoverPhotos(cam.camCode); //API call
-    // MockMarsRover.photos.map(image => {
-    setMarsRoverImages([]);    
-    images.photos.map(image => {
-      const meta = {
-        id: image.id,
-        camCode: cam.camCode,
-        url: image.img_src,
-      };
-      setMarsRoverImages(prevdata => {
-        return [...prevdata, meta];
+    if (!indexAdded.includes(index) && !isLoading) {
+      setIsLoading(true);
+      setIndexAdded(prevData => {
+        if (index == 0) return [...prevData];
+        else return [index, ...prevData];
       });
-    });
-    console.log('Array added!!');
-    marsRoverImages.forEach(element => {
-      console.log('Images - ' + element.url);
-    });
-    setIsLoading(false);
+      const cam = getCameraCodeByIndex(index);
+      //   const images = await api.getMarsRoverPhotos(cam.camCode, 1); //API call  comment this to use mock data
+      mockRover(cam.camCode).photos.map(image => {      //uncomment to use mock data
+        //   images.photos.map(image => {               //comment this to use mock data
+        const meta = {
+          id: image.id,
+          camCode: cam.camCode,
+          uri: image.img_src,
+        };
+        switch (cam.camCode) {
+          case 'FHAZ':
+            setFHAZList(prevdata => {
+              return [...prevdata, meta].slice(-10);
+            });
+            break;
+          case 'CHEMCAM':
+            setCHEMCAMList(prevdata => {
+              return [...prevdata, meta].slice(-10);
+            });
+            break;
+          case 'MAST':
+            setMASTList(prevdata => {
+              return [...prevdata, meta].slice(-10);
+            });
+            break;
+          case 'NAVCAM':
+            setNAVCAMList(prevdata => {
+              return [...prevdata, meta].slice(-10);
+            });
+            break;
+          case 'RHAZ':
+            setRHAZList(prevdata => {
+              return [...prevdata, meta].slice(-10);
+            });
+            break;
+        }
+      });
+      setIsLoading(false);
+    }
   };
 
   const flatListRef = useRef(null);
@@ -65,6 +131,7 @@ export default function RoverImagesList() {
       onPress={() => {
         setCurrentIndex(index);
         pagerViewRef.current.setPageWithoutAnimation(index);
+        fetchPhotos(index);
       }}
       style={{
         width: 150,
@@ -80,7 +147,6 @@ export default function RoverImagesList() {
         style={{
           color: currentIndex === index ? 'white' : 'black',
           fontSize: 18,
-          elevation: currentIndex == index ? 10 : 0,
         }}>
         {item.cam}
       </Text>
@@ -89,21 +155,26 @@ export default function RoverImagesList() {
 
   const onPageScroll = event => {
     const index = event.nativeEvent.position; //get the page index
-    fetchPhotos(index);
     setCurrentIndex(index);
     flatListRef.current.scrollToIndex({animated: true, index: index});
+    fetchPhotos(index);
+  };
+
+  const onEndOfListCallback = () => {
+    console.log('End of list reached!!');
   };
 
   return (
     <View style={GlobalProps.container}>
       <View>
         <FlatList
+          style = {styles.pagerViewTabs}  
           ref={flatListRef}
           horizontal
           data={cams}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          showsHorizontalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
         />
       </View>
 
@@ -111,209 +182,47 @@ export default function RoverImagesList() {
         ref={pagerViewRef}
         onPageSelected={onPageScroll}
         style={styles.pagerView}
-        initialPage={0}>
+        initialPage={0}
+        offscreenPageLimit={1}>
         <View key="1">
-          {isLoading ? (
-            <ActivityIndicator
-              style={GlobalProps.spinnerStyle}
-              size={'large'}
-              color={Colors.primary}
-            />
-          ) : (
-            <View>
-              <FlatList
-                data={marsRoverImages}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>
-                  item.camCode == 'FHAZ' ? (
-                    <TouchableOpacity activeOpacity={1}>
-                      <FastImage
-                        resizeMode="stretch"
-                        style={styles.imageContainer}
-                        source={{uri: item.url}}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View></View>
-                  )
-                }
-              />
-            </View>
-          )}
+          <ImageList
+            roverImages={FHAZ_list}
+            isLoading={isLoading}
+            camCode={'FHAZ'}
+            onEndOfListCallback={() => onEndOfListCallback()}
+          />
         </View>
         <View key="2">
-          {isLoading ? (
-            <ActivityIndicator
-              style={GlobalProps.spinnerStyle}
-              size={'large'}
-              color={Colors.primary}
-            />
-          ) : (
-            <View>
-              <FlatList
-                data={marsRoverImages}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>
-                  item.camCode == 'RHAZ' ? (
-                    <TouchableOpacity activeOpacity={1}>
-                      <FastImage
-                        resizeMode="stretch"
-                        style={styles.imageContainer}
-                        source={{uri: item.url}}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View></View>
-                  )
-                }
-              />
-            </View>
-          )}
+          <ImageList
+            roverImages={RHAZ_list}
+            isLoading={isLoading}
+            camCode={'RHAZ'}
+            onEndOfListCallback={() => onEndOfListCallback()}
+          />
         </View>
         <View key="3">
-          {isLoading ? (
-            <ActivityIndicator
-              style={GlobalProps.spinnerStyle}
-              size={'large'}
-              color={Colors.primary}
-            />
-          ) : (
-            <View>
-              <FlatList
-                data={marsRoverImages}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>
-                  item.camCode == 'MAST' ? (
-                    <TouchableOpacity activeOpacity={1}>
-                      <FastImage
-                        resizeMode="stretch"
-                        style={styles.imageContainer}
-                        source={{uri: item.url}}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View></View>
-                  )
-                }
-              />
-            </View>
-          )}
+          <ImageList
+            roverImages={MAST_list}
+            isLoading={isLoading}
+            camCode={'MAST'}
+            onEndOfListCallback={() => onEndOfListCallback()}
+          />
         </View>
         <View key="4">
-          {isLoading ? (
-            <ActivityIndicator
-              style={GlobalProps.spinnerStyle}
-              size={'large'}
-              color={Colors.primary}
-            />
-          ) : (
-            <View>
-              <FlatList
-                data={marsRoverImages}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>
-                  item.camCode == 'CHEMCAM' ? (
-                    <TouchableOpacity activeOpacity={1}>
-                      <FastImage
-                        resizeMode="stretch"
-                        style={styles.imageContainer}
-                        source={{uri: item.url}}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View></View>
-                  )
-                }
-              />
-            </View>
-          )}
+          <ImageList
+            roverImages={CHEMCAM_list}
+            isLoading={isLoading}
+            camCode={'CHEMCAM'}
+            onEndOfListCallback={() => onEndOfListCallback()}
+          />
         </View>
         <View key="5">
-          {isLoading ? (
-            <ActivityIndicator
-              style={GlobalProps.spinnerStyle}
-              size={'large'}
-              color={Colors.primary}
-            />
-          ) : (
-            <View>
-              <FlatList
-                data={marsRoverImages}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>
-                  item.camCode == 'MAHLI' ? (
-                    <TouchableOpacity activeOpacity={1}>
-                      <FastImage
-                        resizeMode="stretch"
-                        style={styles.imageContainer}
-                        source={{uri: item.url}}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View></View>
-                  )
-                }
-              />
-            </View>
-          )}
-        </View>
-        <View key="6">
-          {isLoading ? (
-            <ActivityIndicator
-              style={GlobalProps.spinnerStyle}
-              size={'large'}
-              color={Colors.primary}
-            />
-          ) : (
-            <View>
-              <FlatList
-                data={marsRoverImages}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>
-                  item.camCode == 'MARDI' ? (
-                    <TouchableOpacity activeOpacity={1}>
-                      <FastImage
-                        resizeMode="stretch"
-                        style={styles.imageContainer}
-                        source={{uri: item.url}}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View></View>
-                  )
-                }
-              />
-            </View>
-          )}
-        </View>
-        <View key="7">
-          {isLoading ? (
-            <ActivityIndicator
-              style={GlobalProps.spinnerStyle}
-              size={'large'}
-              color={Colors.primary}
-            />
-          ) : (
-            <View>
-              <FlatList
-                data={marsRoverImages}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>
-                  item.camCode == 'NAVCAM' ? (
-                    <TouchableOpacity activeOpacity={1}>
-                      <FastImage
-                        resizeMode="stretch"
-                        style={styles.imageContainer}
-                        source={{uri: item.url}}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View></View>
-                  )
-                }
-              />
-            </View>
-          )}
+          <ImageList
+            roverImages={NAVCAM_list}
+            isLoading={isLoading}
+            camCode={'NAVCAM'}
+            onEndOfListCallback={() => onEndOfListCallback()}
+          />
         </View>
       </PagerView>
     </View>
@@ -351,4 +260,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'black',
   },
+  pagerViewTabs:{
+    // position:'relative'
+  }
 });

@@ -1,4 +1,4 @@
-const MockMarsRover = {
+const MockMarsRover_FHAZ = {
     "photos": [
         {
             "id": 102693,
@@ -107,4 +107,4 @@ const MockMarsRover = {
     ]
 }
 
-export default MockMarsRover;
+export default MockMarsRover_FHAZ;
