@@ -8,10 +8,11 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import GlobalProps from '../../global/GlobalProps';
-import Colors from '../../global/Colors';
+import GlobalProps from '../../../global/GlobalProps';
+import Colors from '../../../global/Colors';
 import {useState} from 'react';
 import ImageView from 'react-native-image-viewing';
+import Loading from '../../../global/components/Loading';
 
 export default function ImageList({
   roverImages,
@@ -21,9 +22,10 @@ export default function ImageList({
 }) {
   const [imageViewerVisibility, setImageViewerVisibility] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [state, setState] = useState({loading: true});
 
-  const onPhotoSelected = (index) => {
-    setSelectedImageIndex(index)
+  const onPhotoSelected = index => {
+    setSelectedImageIndex(index);
     setImageViewerVisibility(true);
   };
 
@@ -44,8 +46,13 @@ export default function ImageList({
           renderItem={({item, index}) =>
             item.camCode == camCode ? (
               <View>
-                <TouchableOpacity activeOpacity={1} onPress={() => onPhotoSelected(index)}>
+                {state.loading && <Loading size={'small'}/>}
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => onPhotoSelected(index)}>
                   <FastImage
+                    onLoadStart={() => setState({loading:true})}
+                    onLoadEnd={() => setState({loading:false})}
                     keyExtractor={item => item.id}
                     resizeMode="stretch"
                     style={styles.imageContainer}
@@ -62,7 +69,7 @@ export default function ImageList({
                   FooterComponent={({imageIndex}) => (
                     <View style={{padding: 20, justifyContent: 'center'}}>
                       <Text>
-                        {imageIndex+1}/{roverImages.length}
+                        {imageIndex + 1}/{roverImages.length}
                       </Text>
                     </View>
                   )}

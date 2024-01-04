@@ -45,7 +45,7 @@ const APIs = {
       });
   },
 
-  async getMarsRoverPhotos(camera,page) {
+  async getMarsRoverPhotos(camera, page) {
     //Mars Rover photos by Curiosity and Opportunity.
     const MARS_ROVER_PICS_API =
       base_URL +
@@ -68,27 +68,31 @@ const APIs = {
       });
   },
 
-  async getNASALibraryImages(query, media_type) {
+  async getNASALibraryImages(query, media_type, page) {
     const NASA_LIBRARY_SEARCH_API =
       'https://images-api.nasa.gov/search?q=' +
       query +
       '&media_type=' +
-      media_type;
+      media_type +
+      '&page=' +
+      page +
+      '&page_size=' +
+      10;
     return fetch(NASA_LIBRARY_SEARCH_API)
       .then(response => response.json())
       .then(json => {
-        return json.collection.items;
+        return json;
       })
       .catch(error => {
         console.log(error);
       });
   },
 
-  async getQueryResultImages(api_url) {
+  async getNASALibraryMediaArray(api_url) {
     return fetch(api_url)
       .then(response => response.json())
-      .then(imagesArray => {
-        return imagesArray;
+      .then(mediaArray => {
+        return mediaArray;
       })
       .catch(error => {
         console.log('Error: ' + error);

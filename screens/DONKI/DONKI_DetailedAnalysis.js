@@ -11,7 +11,7 @@ import GlobalProps from '../../global/GlobalProps';
 import {ScrollView} from 'react-native-gesture-handler';
 import HelpingFunctions from '../../utils/HelpingFunctions';
 import Colors from '../../global/Colors';
-import DONKI_Information_Footer from '../../components/DONKI_cards/DONKI_footer';
+import Footer from '../../global/components/Footer';
 import FastImage from 'react-native-fast-image';
 import ImageView from 'react-native-image-viewing';
 
@@ -66,7 +66,7 @@ export default function DONKI_DetailedAnalysis({route}) {
             onRequestClose={() => setIsVisible(false)}
           />
         </View>
-        <DONKI_Information_Footer url={message.messageURL} />
+        <Footer url={message.messageURL} />
       </ScrollView>
     </View>
   );

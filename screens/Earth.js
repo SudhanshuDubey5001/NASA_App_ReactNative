@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import GlobalProps from '../global/GlobalProps';
 import {ScrollView} from 'react-native-gesture-handler';
 import api from '../api/NasaAPIs';
@@ -7,11 +14,14 @@ import TextualData from '../repository/TextualData';
 import HelpingFunctions from '../utils/HelpingFunctions';
 import FastImage from 'react-native-fast-image';
 import ImageView from 'react-native-image-viewing';
-import DONKI_Information_Footer from '../components/DONKI_cards/DONKI_footer';
+import Footer from '../global/components/Footer';
+import Colors from '../global/Colors';
+import Loading from '../global/components/Loading';
 
 export default function Earth() {
   const [visible, setIsVisible] = useState(false);
   const [image, setImage] = useState('');
+  const [state, setState] = useState({loading: true});
 
   const fetchEarthImage = async () => {
     const earthImage = await api.getEarthImage('');
@@ -30,14 +40,20 @@ export default function Earth() {
           Earth Polychromatic Imaging Camera (EPIC)
         </Text>
         <Text style={styles.text}>{TextualData.EPIC_explanation}</Text>
+        {state.loading && <Loading size={'large'}/>}
         <TouchableOpacity activeOpacity={1} onPress={() => setIsVisible(true)}>
-          <FastImage style={styles.imageContainer} source={{uri: image}} />
+          <FastImage
+            onLoadStart={() => setState({loading: true})}
+            onLoadEnd={() => setState({loading: false})}
+            style={styles.imageContainer}
+            source={{uri: image}}
+          />
         </TouchableOpacity>
         <Text style={styles.subtext}>
-          Image clicked: {HelpingFunctions.getPastDate(4)}
+          Image clicked: {HelpingFunctions.getPastDate(14)}
         </Text>
       </View>
-      <DONKI_Information_Footer url={'https://epic.gsfc.nasa.gov'} />
+      <Footer url={'https://epic.gsfc.nasa.gov'} />
       <ImageView
         images={[{uri: image}]}
         imageIndex={0}

@@ -2,9 +2,10 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import GlobalProps from '../../global/GlobalProps';
 import TextualData from '../../repository/TextualData';
 import Colors from '../../global/Colors';
-import HotDogButton from '../../components/HotDogButton';
+import HotDogButton from '../../global/components/HotDogButton';
 import Routes from '../../routes/Routes';
 import {ScrollView} from 'react-native-gesture-handler';
+import Footer from '../../global/components/Footer';
 
 export default function MarsRover({navigation}) {
   const navigateToRoverImagesScreen = () => {
@@ -27,6 +28,7 @@ export default function MarsRover({navigation}) {
           source={require('../../assets/images/curiosityImage.jpeg')}
         />
       </View>
+      <Footer url={'https://mars.nasa.gov/mars2020/multimedia/images/'}/>
     </ScrollView>
   );
 }

@@ -11,7 +11,7 @@ import api from '../../api/NasaAPIs';
 import HelpingFunctions from '../../utils/HelpingFunctions';
 import mockData_CMS_DONKI from '../../MockData/mockData_CMS_DONKI';
 import GlobalProps from '../../global/GlobalProps';
-import DONKI_InformationCard from '../../components/DONKI_cards/DONKI_InformationCard';
+import DONKI_InformationCard from './components/DONKI_InformationCard';
 import Colors from '../../global/Colors';
 import MockNotification_DONKI from '../../MockData/mockNotificationsData_DONKI';
 import Routes from '../../routes/Routes';

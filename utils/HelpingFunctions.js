@@ -5,7 +5,7 @@ const HelpingFunctions = {
       if (date == '') {
         const today = new Date();
         const fourDaysAgo = new Date(today);
-        fourDaysAgo.setDate(today.getDate() - 4);
+        fourDaysAgo.setDate(today.getDate() - 14);
 
         year = fourDaysAgo.getFullYear();
         month = String(fourDaysAgo.getMonth() + 1).padStart(2, '0');

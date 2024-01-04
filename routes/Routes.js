@@ -1,10 +1,15 @@
 const Routes = {
-    Home: 'Home',
-    DONKI: 'DONKI',
+    DRAWER_HOME: 'Home',
+    DRAWER_DONKI: 'DONKI',
+    DRAWER_EARTH: 'Earth',
     DONKI_DETAILED_ANALYSIS: 'DONKI_NotificationScreen', 
     DONKI_INFORMATION_LIST : 'DONKI_InformationScreen',
     MARSROVER_HOME: 'MarsRover',
-    MARSROVER_IMAGES: 'RoverImages'
+    MARSROVER_IMAGES: 'RoverImages',
+    DRAWER_MARSROVER: 'Mars Rover',
+    DRAWER_NASA_LIBRARY: 'NASA Library',
+    NASA_LIBRARY_HOME: 'NasaLibrary',
+    NASA_LIBRARY_ITEM: 'LibraryItem',
 };
 
 export default Routes;

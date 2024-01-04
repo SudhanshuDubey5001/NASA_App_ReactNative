@@ -1,10 +1,10 @@
 import {Linking, StyleSheet, View, Text} from 'react-native';
-import Colors from '../../global/Colors';
+import Colors from '../Colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useState} from 'react';
 import Dialog from 'react-native-dialog';
 
-export default function DONKI_Information_Footer({url}) {
+export default function Footer({url}) {
   const [isDialogVisible, setDialogVisible] = useState(false);
   const [website, setWebsite] = useState('');
 

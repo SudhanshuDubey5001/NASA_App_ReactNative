@@ -15,16 +15,16 @@ import Cameras from './Cameras';
 import Colors from '../../global/Colors';
 import api from '../../api/NasaAPIs';
 import MockMarsRover_FHAZ from '../../MockData/mars_rover_mockData/MockMarsRover_FHAZ';
-import ImageList from '../../components/mars_rover/ImageList';
+import ImageList from './components/ImageList';
 import MockMarsRover_CHEMCAM from '../../MockData/mars_rover_mockData/MockMarsRover_CHEMCAM';
 import MockMarsRover_MAST from '../../MockData/mars_rover_mockData/MockMarsRover_MAST';
 import MockMarsRover_NAVCAM from '../../MockData/mars_rover_mockData/MockMarsRover_NAVCAM';
 import MockMarsRover_RHAZ from '../../MockData/mars_rover_mockData/MockMarsRover_RHAZ';
 
 export default function RoverImagesList({route, navigation}) {
-//   const rover = route.params;
-//   console.log('Rover = '+rover);
-    
+  //   const rover = route.params;
+  //   console.log('Rover = '+rover);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [cams, setCams] = useState(Cameras);
@@ -40,10 +40,7 @@ export default function RoverImagesList({route, navigation}) {
   useEffect(() => {
     //load the first index
     cleanUpArrays();
-    setIndexAdded([]);
-    setIndexAdded(prevData => {
-      return [0, ...prevData];
-    });
+    setIndexAdded([0]);
     fetchPhotos(0);
   }, []);
 
@@ -83,9 +80,10 @@ export default function RoverImagesList({route, navigation}) {
         else return [index, ...prevData];
       });
       const cam = getCameraCodeByIndex(index);
-      //   const images = await api.getMarsRoverPhotos(cam.camCode, 1); //API call  comment this to use mock data
-      mockRover(cam.camCode).photos.map(image => {      //uncomment to use mock data
-        //   images.photos.map(image => {               //comment this to use mock data
+      const images = await api.getMarsRoverPhotos(cam.camCode, 1); //API call  comment this to use mock data
+      //   mockRover(cam.camCode).photos.map(image => {      //uncomment to use mock data
+      images.photos.map(image => {
+        //comment this to use mock data
         const meta = {
           id: image.id,
           camCode: cam.camCode,
@@ -168,7 +166,7 @@ export default function RoverImagesList({route, navigation}) {
     <View style={GlobalProps.container}>
       <View>
         <FlatList
-          style = {styles.pagerViewTabs}  
+          style={styles.pagerViewTabs}
           ref={flatListRef}
           horizontal
           data={cams}
@@ -260,7 +258,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'black',
   },
-  pagerViewTabs:{
+  pagerViewTabs: {
     // position:'relative'
-  }
+  },
 });

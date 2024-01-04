@@ -1,5 +1,5 @@
 import {StyleSheet, View, Text} from 'react-native';
-import Colors from '../../global/Colors';
+import Colors from '../../../global/Colors';
 
 export default function NotificationsCard({item}) {
   return (

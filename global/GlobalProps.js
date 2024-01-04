@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, useColorScheme} from 'react-native';
 import Colors from './Colors';
 
 const GlobalProps = {
@@ -15,6 +15,10 @@ const GlobalProps = {
     flex: 1,
     backgroundColor: 'white',
   },
+  containerDark: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
   spinnerStyle: {
     marginVertical: 100,
   },
@@ -24,6 +28,11 @@ const GlobalProps = {
     margin: 10,
     alignSelf: 'center',
     backgroundColor: 'black',
+  },
+  separator: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    marginHorizontal: 20,
   },
 };
 

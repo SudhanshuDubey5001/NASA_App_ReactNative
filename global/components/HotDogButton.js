@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import Colors from '../global/Colors';
+import Colors from '../Colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function HotDogButton({title, onPressAction}) {

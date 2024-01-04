@@ -11,21 +11,25 @@ import Colors from '../global/Colors';
 import api from '../api/NasaAPIs';
 import {ScrollView} from 'react-native-gesture-handler';
 import GlobalProps from '../global/GlobalProps';
-import DONKI_Information_Footer from '../components/DONKI_cards/DONKI_footer';
+import Footer from '../global/components/Footer';
 import ImageView from 'react-native-image-viewing';
+import Loading from '../global/components/Loading';
 
 export default function Home() {
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState({
+    textLoading: true,
+    imageLoading: true,
+  });
   const [imageMetadata, setImageMetadata] = useState({});
   const [visible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     setImageMetadata({});
     fetchImage();
   }, []);
 
   const fetchImage = async () => {
+    setLoading({textLoading: true});
     const json = await api.getTodayImage();
     setImageMetadata({
       date: json.date,
@@ -33,40 +37,42 @@ export default function Home() {
       title: json.title,
       url: json.url,
     });
-    setLoading(false);
+    // setLoading({textLoading: false});
   };
   return (
     <ScrollView>
       <Text style={GlobalProps.titleText}>Astronomy picture of the day</Text>
       <View style={GlobalProps.container}>
-        {isLoading ? (
-          <ActivityIndicator
-            style={GlobalProps.spinnerStyle}
-            size={'large'}
-            color={Colors.primary}
-          />
-        ) : (
+        <View>
           <View>
-            <TouchableOpacity activeOpacity={1} onPress={() => setIsVisible(true)}>
+            {isLoading.imageLoading && <Loading/>}
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => setIsVisible(true)}>
               <Image
+                onLoadStart={() => setLoading({imageLoading: true})}
+                onLoadEnd={() => setLoading({imageLoading: false})}
                 style={styles.imageContainer}
                 source={{uri: imageMetadata.url}}
               />
             </TouchableOpacity>
-            <Text style={styles.text}>{imageMetadata.title}</Text>
+          </View>
+          <Text style={styles.text}>{imageMetadata.title}</Text>
+          <View>
+            {isLoading.textLoading && <Loading />}
             <Text style={styles.textExplanation}>
               {imageMetadata.explanation}
             </Text>
-            <DONKI_Information_Footer url={imageMetadata.url} />
-
-            <ImageView
-              images={[{uri: imageMetadata.url}]}
-              imageIndex={0}
-              visible={visible}
-              onRequestClose={() => setIsVisible(false)}
-            />
           </View>
-        )}
+          <Footer url={imageMetadata.url} />
+
+          <ImageView
+            images={[{uri: imageMetadata.url}]}
+            imageIndex={0}
+            visible={visible}
+            onRequestClose={() => setIsVisible(false)}
+          />
+        </View>
       </View>
     </ScrollView>
   );

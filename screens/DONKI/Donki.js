@@ -8,9 +8,9 @@ import {
   View,
 } from 'react-native';
 import GlobalProps from '../../global/GlobalProps';
-import HotDogButton from '../../components/HotDogButton';
+import HotDogButton from '../../global/components/HotDogButton';
 import TextualData from '../../repository/TextualData';
-import NotificationsCard from '../../components/DONKI_cards/NotificationsCard';
+import NotificationsCard from './components/NotificationsCard';
 import InfinitePager from 'react-native-infinite-pager';
 import {ScrollView} from 'react-native-gesture-handler';
 import MockNotification_DONKI from '../../MockData/mockNotificationsData_DONKI';
@@ -35,7 +35,7 @@ export default function Donki({navigation}) {
     // getting reports of only yesterday
     const startDate = HelpingFunctions.getPastDate(1);
     const endDate = startDate;
-    const reports = await api.get_DONKI_Notifications_report(startDate, endDate); //API call
+    // const reports = await api.get_DONKI_Notifications_report(startDate, endDate); //API call
     // reports.map(report => {
       MockNotification_DONKI.map(report => {                         //mock data
       const summaryRegex = /## Summary:([\s\S]*?)(?=\n##|$)/;

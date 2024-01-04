@@ -1,10 +1,10 @@
 import {StyleSheet, View, Text, Button} from 'react-native';
 import {Image} from 'react-native-reanimated/lib/typescript/Animated';
 import {Icon} from 'react-native-vector-icons/FontAwesome';
-import HelpingFunctions from '../../utils/HelpingFunctions';
+import HelpingFunctions from '../../../utils/HelpingFunctions';
 import Dialog from 'react-native-dialog';
 import {useState} from 'react';
-import Colors from '../../global/Colors';
+import Colors from '../../../global/Colors';
 
 export default function DONKI_InformationCard({info}) {
   const [isDialogVisible, setDialogVisible] = useState(false);
@@ -33,15 +33,6 @@ export default function DONKI_InformationCard({info}) {
           {info.messageSummary}
         </Text>
       </View>
-      <Dialog.Container visible={isDialogVisible}>
-        <Dialog.Title>Confirmation</Dialog.Title>
-        <Dialog.Description>
-          Do you want to open the link to NASA website for detailed review on
-          the selected CME?
-        </Dialog.Description>
-        <Dialog.Button label="Cancel" onPress={handleCancel} />
-        <Dialog.Button label="Confirm" onPress={handleConfirm} />
-      </Dialog.Container>
     </View>
   );
 }
