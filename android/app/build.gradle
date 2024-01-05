@@ -90,6 +90,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('your_key_name.keystore')
+            storePassword 'Anotherme-7'
+            keyAlias 'sudhanshu'
+            keyPassword 'Anotherme-7'
+    }
     }
     buildTypes {
         debug {
