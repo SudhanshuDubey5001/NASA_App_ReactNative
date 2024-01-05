@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   keywordStyle: {
     padding: 5,
     margin: 5,
-    backgroundColor: '#820300',
+    backgroundColor: Colors.tertiary2,
     borderWidth: 1,
     borderColor: '#333',
     borderRadius: 7,

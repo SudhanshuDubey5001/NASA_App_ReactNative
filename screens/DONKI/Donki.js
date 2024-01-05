@@ -35,7 +35,10 @@ export default function Donki({navigation}) {
     // getting reports of only yesterday
     const startDate = HelpingFunctions.getPastDate(1);
     const endDate = startDate;
-    // const reports = await api.get_DONKI_Notifications_report(startDate, endDate); //API call
+    // const reports = await api.get_DONKI_Notifications_report(
+    //   startDate,
+    //   endDate,
+    // ); //API call
     // reports.map(report => {
       MockNotification_DONKI.map(report => {                         //mock data
       const summaryRegex = /## Summary:([\s\S]*?)(?=\n##|$)/;

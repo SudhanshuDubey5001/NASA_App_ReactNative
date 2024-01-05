@@ -1,23 +1,23 @@
 import {StyleSheet, useColorScheme} from 'react-native';
 import Colors from './Colors';
+import GlobalStylesConstants from './GlobalStylesConstants';
 
 const GlobalProps = {
   titleText: {
     fontSize: 26,
     paddingHorizontal: 20,
     paddingVertical: 40,
-    color: 'black',
     fontFamily: 'LibreBaskerville-Bold',
     backgroundColor: Colors.primary,
-    color: 'white',
+    color: GlobalStylesConstants.headerTextColor,
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: GlobalStylesConstants.backgroundColorLight,
   },
   containerDark: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: GlobalStylesConstants.backgroundColorDark,
   },
   spinnerStyle: {
     marginVertical: 100,

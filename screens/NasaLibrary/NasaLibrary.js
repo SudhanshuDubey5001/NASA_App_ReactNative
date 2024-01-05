@@ -20,36 +20,49 @@ import Loading from '../../global/components/Loading';
 import Footer from '../../global/components/Footer';
 import FastImage from 'react-native-fast-image';
 import Routes from '../../routes/Routes';
+import ImageVideoRadioButton from './components/ImageVideoRadioButton';
+import HotDogButton from '../../global/components/HotDogButton';
 
 export default function NasaLibrary({navigation}) {
   const mediaType = {image: 'image', video: 'video'};
   const [mediaTypeSelected, setMediaTypeSelection] = useState('image');
+  // let mediaTypeSelected = 'image';
   const [queryData, setQueryData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [noDataFound, setNoDataFound] = useState(false);
   const [userQuery, setUserQuery] = useState('');
   let userInput;
-  const [_firstTimeSearch, _setFirstTimeSearch] = useState(false);
+  const [_doesFirstTimeSearchHappened, _setDoesFirstTimeSearchHappened] =
+    useState(false);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     resetData();
   }, []);
 
-  console.log('ColourScheme = ' + useColorScheme());
+  useEffect(() => {
+    console.log('List data updated!');
+  }, [queryData]);
+
+  useEffect(() => {
+    if (_doesFirstTimeSearchHappened) {
+      console.log('Page = ' + page);
+      fetchQueryResult(userQuery, mediaTypeSelected, page);
+    }
+  }, [page]);
 
   const fetchQueryResult = async (query, media_type, page) => {
     console.log('fetching data....');
     console.log('Input = ' + query);
     setUserQuery(query);
     setIsLoading(true);
-    // const queryResult = await api.getNASALibraryImages(query, media_type, page); //API call
-    // if (queryResult.collection.items.length > 0) {
-    if (MockImageData.collection.items.length > 0) {
-      _setFirstTimeSearch(true);
+    const queryResult = await api.getNASALibraryImages(query, media_type, page); //API call
+    if (queryResult.collection.items.length > 0) {
+      // if (MockImageData.collection.items.length > 0) {
+      _setDoesFirstTimeSearchHappened(true);
       setNoDataFound(false);
-      // queryResult.collection.items.map(item => {
-      MockImageData.collection.items.map(item => {
+      queryResult.collection.items.map(item => {
+        // MockImageData.collection.items.map(item => {
         const keywords = [];
         let index = 0;
         item.data[0].keywords.map(keyword => {
@@ -91,18 +104,25 @@ export default function NasaLibrary({navigation}) {
 
   const onEndOfListCallback = () => {
     console.log('End of list reached!!');
-    if (_firstTimeSearch) {
+    if (_doesFirstTimeSearchHappened) {
       const newPage = page + 1;
       setPage(newPage);
-      fetchQueryResult(userQuery, mediaTypeSelected, page);
+      //now page useEffect will run once the page is updated and load the next page content
     }
   };
 
+  const showMore = () => {};
+
   const resetData = () => {
-    _setFirstTimeSearch(false);
+    _setDoesFirstTimeSearchHappened(false);
     setPage(1);
     setQueryData([]);
     console.log('Array cleared');
+  };
+
+  const onPressRadioButton = selection => {
+    setMediaTypeSelection(selection);
+    console.log('Media type selected = ' + selection);
   };
 
   const header = () => {
@@ -135,38 +155,11 @@ export default function NasaLibrary({navigation}) {
             }}
           />
         </View>
-        <View style={styles.mediaTypeStyle}>
-          <View style={styles.radioButtonStyle}>
-            <RadioButton
-              value={mediaType.image}
-              status={
-                mediaTypeSelected == mediaType.image ? 'checked' : 'unchecked'
-              }
-              onPress={() => setMediaTypeSelection(mediaType.image)}
-              color={useColorScheme() == 'light' ? Colors.primary : 'white'}
-            />
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => setMediaTypeSelection(mediaType.image)}>
-              <Text style={styles.radioButtonText}>Image</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.radioButtonStyle}>
-            <RadioButton
-              value={mediaType.video}
-              status={
-                mediaTypeSelected == mediaType.video ? 'checked' : 'unchecked'
-              }
-              onPress={() => setMediaTypeSelection(mediaType.video)}
-              color={useColorScheme() == 'light' ? Colors.primary : 'white'}
-            />
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => setMediaTypeSelection(mediaType.video)}>
-              <Text style={styles.radioButtonText}>Video</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <Button title="clear" onPress={() => resetData()} />
+        <ImageVideoRadioButton
+          mediaTypeSelected={mediaTypeSelected}
+          onPressMediaType={onPressRadioButton}
+        />
         <View>
           {userQuery != '' ? (
             <Text style={styles.queryStyle}>
@@ -176,6 +169,21 @@ export default function NasaLibrary({navigation}) {
             <View></View>
           )}
         </View>
+      </View>
+    );
+  };
+
+  const footer = () => {
+    return (
+      <View>
+        {isLoading && <Loading size={'large'} />}
+        {/* {_doesFirstTimeSearchHappened && (
+          <TouchableOpacity
+            style={styles.showMoreButtonStyle}
+            onPress={showMore}>
+            <Text style={styles.showMoreButtonTextStyle}>Show more</Text>
+          </TouchableOpacity>
+        )} */}
       </View>
     );
   };
@@ -205,7 +213,7 @@ export default function NasaLibrary({navigation}) {
             )}
           </View>
         )}
-        ListFooterComponent={isLoading && <Loading size={'large'} />}
+        ListFooterComponent={footer}
       />
       {queryData.length == 0 && !isLoading && noDataFound && (
         <View>
@@ -222,6 +230,24 @@ export default function NasaLibrary({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  showMoreButtonStyle: {
+    borderWidth: 1,
+    borderRadius: 30,
+    marginTop: 10,
+    marginBottom: 30,
+    elevation: 2,
+    backgroundColor: 'white',
+    width: 'auto',
+    alignSelf: 'center',
+    backgroundColor: Colors.tertiary2,
+  },
+  showMoreButtonTextStyle: {
+    fontSize: 16,
+    color: 'white',
+    paddingVertical: 7,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+  },
   noDataFoundStyle: {
     width: 200,
     height: 100,
