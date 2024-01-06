@@ -27,7 +27,7 @@ const GlobalProps = {
     height: 200,
     margin: 10,
     alignSelf: 'center',
-    backgroundColor: 'black',
+    backgroundColor: 'white',
   },
   separator: {
     borderBottomColor: '#ccc',

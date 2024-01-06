@@ -17,6 +17,7 @@ import ImageView from 'react-native-image-viewing';
 import Footer from '../global/components/Footer';
 import Colors from '../global/Colors';
 import Loading from '../global/components/Loading';
+import GlobalStylesConstants from '../global/GlobalStylesConstants';
 
 export default function Earth() {
   const [visible, setIsVisible] = useState(false);
@@ -34,8 +35,8 @@ export default function Earth() {
   }, []);
 
   return (
-    <ScrollView>
-      <View style={GlobalProps.container}>
+    <ScrollView style={GlobalProps.container}>
+      <View>
         <Text style={GlobalProps.titleText}>
           Earth Polychromatic Imaging Camera (EPIC)
         </Text>
@@ -70,10 +71,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   text: {
-    fontSize: 18,
-    margin: 10,
+    marginTop: 10,
+    fontSize: 16,
     color: 'black',
-    padding: 10,
+    fontFamily:GlobalStylesConstants.FONT_LIBREBASKERVILLE_REGULAR,
+    lineHeight:34,
+    padding: 20,
   },
   subtext: {
     fontSize: 18,

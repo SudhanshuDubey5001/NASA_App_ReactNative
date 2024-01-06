@@ -124,52 +124,9 @@ export default function LibraryItem({route, navigation}) {
       setVideoURL(media_uri_array);
     }
 
-    // console.log('Media type = ' + queryItem.media_type);
-
     media_uri_array.map(item => {
       console.log('URL = ' + item);
     });
-
-    // console.log('format1 = ' + images_format1[index]);
-    // console.log('format2 = ' + images_format2[index]);
-    // console.log('format3 = ' + images_format3[index]);
-    // console.log('format4 = ' + images_format4[index]);
-    // let media_item_image = '';
-
-    // if (queryItem.media_type == 'image') {
-    //   while (media_item_image == '' && index < 4) {
-    //     media_uri_array.forEach(element => {
-    //       console.log('format searching= ' + images_format1[index]);
-    //       if (
-    //         element.endsWith(images_format1[index]) ||
-    //         element.endsWith(images_format2[index]) ||
-    //         element.endsWith(images_format3[index]) ||
-    //         element.endsWith(images_format4[index])
-    //       ) {
-    //         media_item_image = element;
-    //         setMediaURI_Image(element);
-    //       }
-    //     });
-    //     index++;
-    //   }
-    // } else {
-    //   media_uri_array.forEach(element => {
-    //     if (
-    //       element.endsWith('~orig.mp4') ||
-    //       element.endsWith('~orig.mov') ||
-    //       element.endsWith('~orig.MP4') ||
-    //       element.endsWith('~orig.MOV')
-    //     ) {
-    //       setMediaURI_Video(element);
-    //     }
-    //   });
-    // }
-
-    // setContentLoading(false);
-    // setTimeout(() => {
-    //   console.log('Image: ' + media_uri_image);
-    //   console.log('Video: ' + media_uri_video);
-    // }, 2000);
   };
 
   return (
@@ -231,7 +188,7 @@ export default function LibraryItem({route, navigation}) {
       <Footer
         url={
           'https://images.nasa.gov/search?q=' +
-          queryItem.keywords[0] +
+          queryItem.keywords[0].keyword +
           '&page=1&media=image,video,audio&yearStart=1920&yearEnd=' +
           new Date().getFullYear()
         }

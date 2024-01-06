@@ -58,7 +58,6 @@ export default function ImageList({
                     style={styles.imageContainer}
                     source={{uri: item.uri}}
                     onError={error => console.log('error: ' + error)}
-                    lazy={true}
                   />
                 </TouchableOpacity>
                 <ImageView
@@ -91,6 +90,5 @@ const styles = StyleSheet.create({
     height: 350,
     alignSelf: 'center',
     margin: 10,
-    backgroundColor: 'black',
   },
 });

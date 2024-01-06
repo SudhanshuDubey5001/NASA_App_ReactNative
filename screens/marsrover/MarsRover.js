@@ -6,6 +6,7 @@ import HotDogButton from '../../global/components/HotDogButton';
 import Routes from '../../routes/Routes';
 import {ScrollView} from 'react-native-gesture-handler';
 import Footer from '../../global/components/Footer';
+import GlobalStylesConstants from '../../global/GlobalStylesConstants';
 
 export default function MarsRover({navigation}) {
   const navigateToRoverImagesScreen = () => {
@@ -23,10 +24,10 @@ export default function MarsRover({navigation}) {
             onPressAction={navigateToRoverImagesScreen}
           />
         </View>
-        <Image
+        {/* <Image
           style={styles.imageContainer}
           source={require('../../assets/images/curiosityImage.jpeg')}
-        />
+        /> */}
       </View>
       <Footer url={'https://mars.nasa.gov/mars2020/multimedia/images/'}/>
     </ScrollView>
@@ -49,9 +50,12 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    fontSize: 20,
-    marginBottom: 30,
+    marginTop: 10,
+    marginBottom: 20,
+    fontSize: 16,
     color: 'black',
+    fontFamily:GlobalStylesConstants.FONT_LIBREBASKERVILLE_REGULAR,
+    lineHeight:34,
   },
   body: {
     marginHorizontal: 10,

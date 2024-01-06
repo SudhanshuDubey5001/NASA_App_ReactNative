@@ -14,6 +14,8 @@ import Colors from '../../global/Colors';
 import Footer from '../../global/components/Footer';
 import FastImage from 'react-native-fast-image';
 import ImageView from 'react-native-image-viewing';
+import GlobalStylesConstants from '../../global/GlobalStylesConstants';
+import DetailedAnalysisImageView from './components/DetailedAnalysisImageView';
 
 export default function DONKI_DetailedAnalysis({route}) {
   const message = route.params;
@@ -46,16 +48,10 @@ export default function DONKI_DetailedAnalysis({route}) {
           {modifiedMessageBody.httpLinks.map((image, index) => (
             <TouchableOpacity
               onPress={() => {
-                setIsVisible(true);
                 setIndex(index);
+                setIsVisible(true);
               }}>
-              <FastImage
-                resizeMode="contain"
-                style={GlobalProps.imageContainer}
-                source={{
-                  uri: image,
-                }}
-              />
+              <DetailedAnalysisImageView uri={image}/>
             </TouchableOpacity>
           ))}
 
@@ -85,8 +81,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   text: {
+    marginTop: 10,
+    fontSize: 16,
     color: 'black',
-    fontSize: 18,
+    fontFamily:GlobalStylesConstants.FONT_LIBREBASKERVILLE_REGULAR,
+    lineHeight:34,
     flex: 1,
   },
   titleText: {

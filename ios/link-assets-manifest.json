@@ -24,6 +24,14 @@
     {
       "path": "assets/fonts/NotoSerifSemiBold.ttf",
       "sha1": "a0291765f0f587f1f526c75952c991bea10c44ec"
+    },
+    {
+      "path": "assets/fonts/NunitoSansRegular.ttf",
+      "sha1": "466635ba024c43f741e320148a159557fd732ec0"
+    },
+    {
+      "path": "assets/fonts/NunitoSansSemiBold.ttf",
+      "sha1": "b711d63c786e5a61d89f8918ab36925274bd591b"
     }
   ]
 }

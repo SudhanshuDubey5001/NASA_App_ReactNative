@@ -22,6 +22,7 @@ import FastImage from 'react-native-fast-image';
 import Routes from '../../routes/Routes';
 import ImageVideoRadioButton from './components/ImageVideoRadioButton';
 import HotDogButton from '../../global/components/HotDogButton';
+import ListPureComponent from './components/ListPureComponent';
 
 export default function NasaLibrary({navigation}) {
   const mediaType = {image: 'image', video: 'video'};
@@ -51,6 +52,16 @@ export default function NasaLibrary({navigation}) {
     }
   }, [page]);
 
+  useEffect(() => {
+    if (userQuery != '') {
+      resetData();
+      //wait 200ms to reset the data
+      setTimeout(() => {
+        fetchQueryResult(userQuery, mediaTypeSelected, page);
+      }, 200);
+    }
+  }, [mediaTypeSelected]);
+
   const fetchQueryResult = async (query, media_type, page) => {
     console.log('fetching data....');
     console.log('Input = ' + query);
@@ -66,7 +77,7 @@ export default function NasaLibrary({navigation}) {
         const keywords = [];
         let index = 0;
         item.data[0].keywords.map(keyword => {
-          keywords.push({id: index, keyword: keyword});
+          keywords.push({id: index + item.data[0].nasa_id, keyword: keyword});
           index++;
         });
         const queryItem = {
@@ -79,9 +90,11 @@ export default function NasaLibrary({navigation}) {
           keywords: keywords,
           media_type: mediaTypeSelected,
         };
-        setQueryData(prevData => {
-          return [...prevData, queryItem];
-        });
+        setTimeout(() => {
+          setQueryData(prevData => {
+            return [...prevData, queryItem];
+          });
+        }, 200);
       });
     } else {
       setNoDataFound(true);
@@ -155,7 +168,6 @@ export default function NasaLibrary({navigation}) {
             }}
           />
         </View>
-        <Button title="clear" onPress={() => resetData()} />
         <ImageVideoRadioButton
           mediaTypeSelected={mediaTypeSelected}
           onPressMediaType={onPressRadioButton}
@@ -177,13 +189,16 @@ export default function NasaLibrary({navigation}) {
     return (
       <View>
         {isLoading && <Loading size={'large'} />}
-        {/* {_doesFirstTimeSearchHappened && (
-          <TouchableOpacity
-            style={styles.showMoreButtonStyle}
-            onPress={showMore}>
-            <Text style={styles.showMoreButtonTextStyle}>Show more</Text>
-          </TouchableOpacity>
-        )} */}
+        {queryData.length == 0 && !isLoading && noDataFound && (
+          <View>
+            <FastImage
+              resizeMode="contain"
+              style={styles.noDataFoundStyle}
+              source={require('../../assets/images/notfound.png')}
+            />
+            <Text style={{alignSelf: 'center'}}>Oops..not available</Text>
+          </View>
+        )}
       </View>
     );
   };
@@ -215,16 +230,6 @@ export default function NasaLibrary({navigation}) {
         )}
         ListFooterComponent={footer}
       />
-      {queryData.length == 0 && !isLoading && noDataFound && (
-        <View>
-          <FastImage
-            resizeMode="contain"
-            style={styles.noDataFoundStyle}
-            source={require('../../assets/images/notfound.png')}
-          />
-          <Text style={{alignSelf: 'center'}}>Oops..not available</Text>
-        </View>
-      )}
     </View>
   );
 }

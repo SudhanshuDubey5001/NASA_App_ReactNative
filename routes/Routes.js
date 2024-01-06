@@ -2,6 +2,7 @@ const Routes = {
     DRAWER_HOME: 'Home',
     DRAWER_DONKI: 'DONKI',
     DRAWER_EARTH: 'Earth',
+    DRAWER_ABOUT: 'About',
     DONKI_DETAILED_ANALYSIS: 'DONKI_NotificationScreen', 
     DONKI_INFORMATION_LIST : 'DONKI_InformationScreen',
     MARSROVER_HOME: 'MarsRover',

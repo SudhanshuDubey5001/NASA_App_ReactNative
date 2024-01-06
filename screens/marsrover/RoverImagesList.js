@@ -41,7 +41,9 @@ export default function RoverImagesList({route, navigation}) {
     //load the first index
     cleanUpArrays();
     setIndexAdded([0]);
-    fetchPhotos(0);
+    setTimeout(() => {
+      fetchPhotos(0);
+    },1000);
   }, []);
 
   const cleanUpArrays = () => {

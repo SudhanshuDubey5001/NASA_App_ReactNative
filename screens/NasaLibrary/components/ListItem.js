@@ -38,9 +38,23 @@ export default function ListItem({item, onPressKeyword, onPressDataItem}) {
               ? styles.imageSubtextStyle
               : styles.imageSubtextDarkStyle
           }>
-          <Text style={styles.captionStyle}>{item.title}</Text>
+          <Text
+            style={
+              useColorScheme() == 'light'
+                ? styles.captionStyle
+                : styles.captionStyleDark
+            }>
+            {item.title}
+          </Text>
           <View>
-            <Text style={styles.captionStyle}>Keywords: </Text>
+            <Text
+              style={
+                useColorScheme() == 'light'
+                  ? styles.captionStyle
+                  : styles.captionStyleDark
+              }>
+              Keywords:{' '}
+            </Text>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
@@ -85,6 +99,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'LibreBaskerville-Bold',
     paddingVertical: 10,
+    color: 'black',
+  },
+  captionStyleDark: {
+    fontSize: 15,
+    fontFamily: 'LibreBaskerville-Bold',
+    paddingVertical: 10,
+    color: 'white',
   },
   imageSubtextStyle: {
     padding: 10,

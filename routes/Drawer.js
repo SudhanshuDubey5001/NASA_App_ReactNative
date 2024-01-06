@@ -10,6 +10,7 @@ import DONKIStack from "./DONKIStack";
 import MarsRoverStack from "./MarsRoverStack";
 import Routes from "./Routes";
 import NASALibraryStack from "./NASALibraryStack";
+import About from "../screens/About";
 
 const Drawer = createDrawerNavigator();
 
@@ -17,7 +18,7 @@ export default function Navigator() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName={Routes.DRAWER_NASA_LIBRARY}
+        initialRouteName={Routes.DRAWER_HOME}
         screenOptions={{
           headerStyle: { backgroundColor: GlobalProps.headerBackgroundColor },
           headerTintColor: GlobalProps.headerTextColor,
@@ -76,6 +77,17 @@ export default function Navigator() {
             return {
               headerTitle: () => (
                 <Header navigation={navigation} title={"NASA Library"} />
+              ),
+            };
+          }}
+        />
+        <Drawer.Screen
+          name={Routes.DRAWER_ABOUT}
+          component={About}
+          options={({ navigation }) => {
+            return {
+              headerTitle: () => (
+                <Header navigation={navigation} title={"About"} />
               ),
             };
           }}

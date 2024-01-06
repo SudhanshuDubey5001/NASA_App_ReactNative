@@ -14,30 +14,39 @@ import GlobalProps from '../global/GlobalProps';
 import Footer from '../global/components/Footer';
 import ImageView from 'react-native-image-viewing';
 import Loading from '../global/components/Loading';
+import GlobalStylesConstants from '../global/GlobalStylesConstants';
+import VideoComponent from '../global/components/VideoComponent';
+import WebView from 'react-native-webview';
 
 export default function Home() {
   const [isLoading, setLoading] = useState({
     textLoading: true,
-    imageLoading: true,
+    mediaLoading: true,
   });
-  const [imageMetadata, setImageMetadata] = useState({});
+  const [mediaMetadata, setMediaMetadata] = useState({});
   const [visible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setImageMetadata({});
+    setMediaMetadata({});
     fetchImage();
   }, []);
+
+  useEffect(() => {
+    console.log('Media metadata updated');
+  }, [mediaMetadata]);
 
   const fetchImage = async () => {
     setLoading({textLoading: true});
     const json = await api.getTodayImage();
-    setImageMetadata({
+    setMediaMetadata({
       date: json.date,
       explanation: json.explanation,
       title: json.title,
       url: json.url,
+      media_type: json.media_type,
     });
-    // setLoading({textLoading: false});
+    console.log('Daily media = ' + mediaMetadata.url);
+    setLoading({textLoading: false, mediaLoading: false});
   };
   return (
     <ScrollView>
@@ -45,29 +54,42 @@ export default function Home() {
       <View style={GlobalProps.container}>
         <View>
           <View>
-            {isLoading.imageLoading && <Loading/>}
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => setIsVisible(true)}>
-              <Image
-                onLoadStart={() => setLoading({imageLoading: true})}
-                onLoadEnd={() => setLoading({imageLoading: false})}
-                style={styles.imageContainer}
-                source={{uri: imageMetadata.url}}
-              />
-            </TouchableOpacity>
+            {isLoading.mediaLoading && <Loading />}
+            {mediaMetadata.media_type == 'image' ? (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => setIsVisible(true)}>
+                <Image
+                  onLoadStart={() => setLoading({mediaLoading: true})}
+                  onLoadEnd={() => setLoading({mediaLoading: false})}
+                  style={styles.imageContainer}
+                  source={{uri: mediaMetadata.url}}
+                />
+              </TouchableOpacity>
+            ) : (
+              <View>
+                <WebView
+                  style={styles.webViewStyle}
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                  source={{
+                    uri: mediaMetadata.url,
+                  }}
+                />
+              </View>
+            )}
           </View>
-          <Text style={styles.text}>{imageMetadata.title}</Text>
+          <Text style={styles.text}>{mediaMetadata.title}</Text>
           <View>
             {isLoading.textLoading && <Loading />}
             <Text style={styles.textExplanation}>
-              {imageMetadata.explanation}
+              {mediaMetadata.explanation}
             </Text>
+            <Footer url={mediaMetadata.url} />
           </View>
-          <Footer url={imageMetadata.url} />
 
           <ImageView
-            images={[{uri: imageMetadata.url}]}
+            images={[{uri: mediaMetadata.url}]}
             imageIndex={0}
             visible={visible}
             onRequestClose={() => setIsVisible(false)}
@@ -79,6 +101,10 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
+  webViewStyle:{
+    width:'100%',
+    height:300
+  },
   container: {
     padding: 20,
     marginTop: 40,
@@ -95,14 +121,18 @@ const styles = StyleSheet.create({
     height: 350,
   },
   text: {
-    fontSize: 20,
-    alignSelf: 'center',
+    marginTop: 10,
+    fontSize: 16,
     color: 'black',
+    fontFamily: GlobalStylesConstants.FONT_LIBREBASKERVILLE_BOLD,
+    alignSelf: 'center',
   },
   textExplanation: {
-    fontSize: 18,
+    marginTop: 10,
+    padding: 20,
+    fontSize: 16,
     color: 'black',
-    padding: 18,
-    marginBottom: 30,
+    fontFamily: GlobalStylesConstants.FONT_LIBREBASKERVILLE_REGULAR,
+    lineHeight: 34,
   },
 });

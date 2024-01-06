@@ -18,6 +18,7 @@ import api from '../../api/NasaAPIs';
 import HelpingFunctions from '../../utils/HelpingFunctions';
 import Colors from '../../global/Colors';
 import Routes from '../../routes/Routes';
+import GlobalStylesConstants from '../../global/GlobalStylesConstants';
 
 export default function Donki({navigation}) {
   const [notificationMessages, setNotiMessages] = useState([]);
@@ -31,16 +32,21 @@ export default function Donki({navigation}) {
     navigation.navigate(Routes.DONKI_DETAILED_ANALYSIS, item);
   };
 
+  useEffect(() => {
+    console.log('Notification updated!!');
+  },[notificationMessages]);
+  
+
   const fetchNotifications = async () => {
     // getting reports of only yesterday
     const startDate = HelpingFunctions.getPastDate(1);
     const endDate = startDate;
-    // const reports = await api.get_DONKI_Notifications_report(
-    //   startDate,
-    //   endDate,
-    // ); //API call
-    // reports.map(report => {
-      MockNotification_DONKI.map(report => {                         //mock data
+    const reports = await api.get_DONKI_Notifications_report(
+      startDate,
+      endDate,
+    ); //API call
+    reports.map(report => {
+      // MockNotification_DONKI.map(report => {                         //mock data
       const summaryRegex = /## Summary:([\s\S]*?)(?=\n##|$)/;
       const matchS = report.messageBody.match(summaryRegex);
       const summary = matchS ? matchS[1].trim() : '';
@@ -51,7 +57,7 @@ export default function Donki({navigation}) {
       console.log('title: ' + title);
 
       const message = {
-        key: report.messageID,
+        id: report.messageID,
         fullMessageBody: report.messageBody,
         messageTitle: title,
         messageSummary: summary,
@@ -93,6 +99,8 @@ export default function Donki({navigation}) {
         ) : (
           <FlatList
             style={styles.list}
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={item => item.id}
             data={notificationMessages}
             pagingEnabled={true}
             renderItem={({item}) => (
@@ -154,9 +162,10 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 10,
-    fontSize: 18,
-    padding: 10,
+    fontSize: 16,
     color: 'black',
+    fontFamily:GlobalStylesConstants.FONT_LIBREBASKERVILLE_REGULAR,
+    lineHeight:34
   },
   list: {
     margin: 10,
